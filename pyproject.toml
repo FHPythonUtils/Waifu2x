@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "waifu2x"
+version = "2021"
+description = "Chainer implementation of waifu2x"
+authors = ["FredHappyface"]
+classifiers = [
+	"Environment :: Console",
+	"Environment :: MacOS X",
+	"Environment :: Win32 (MS Windows)",
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"Intended Audience :: Education",
+	"License :: OSI Approved :: MIT License",
+	"Natural Language :: English",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Topic :: Utilities"
+]
+homepage = "https://github.com/FHPythonUtils/waifu2x"
+repository = "https://github.com/FHPythonUtils/waifu2x"
+documentation = "https://github.com/FHPythonUtils/waifu2x/blob/master/README.md"
+readme = "README.md"
+
+[tool.poetry.scripts]
+waifu2x = 'waifu2x:main'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+numpy = "<3,>=1.20.1"
+chainer = "<9,>=7.7.0"
+Pillow = "<10,>=8.1.2"
+Wand = "<2,>=0.6.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+# Pylint
+[tool.pylint.basic]
+argument-naming-style ="snake_case"
+attr-naming-style ="snake_case"
+function-naming-style ="snake_case"
+method-naming-style ="snake_case"
+variable-naming-style ="snake_case"
+
+[tool.pylint.format]
+indent-string ="\t"
+
+[tool.pylint.master]
+ignore-patterns ="test_.*?py"
+
+[tool.pylint.messages_control]
+enable = [
+	'F',  # Fatal
+	'E',  # Error
+	'W',  # Warning
+	'R',  # Refactor
+	'C',  # Convention
+]
+disable=[
+	"pointless-string-statement",
+	"superfluous-parens",
+	"bad-continuation",
+	"wrong-import-position",
+	"unsubscriptable-object",
+	"python3",
+]
