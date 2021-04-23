@@ -11,6 +11,8 @@
 <!-- omit in toc -->
 # Waifu2x
 
+<img src="readme-assets/icons/name.png" alt="Project Icon" width="750">
+
 Chainer implementation of waifu2x.
 
 ## Help
