@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2021"
+version = "2021.1"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
 classifiers = [

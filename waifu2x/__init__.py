@@ -60,9 +60,13 @@ def upscale_image(cfg, src, scale_model, alpha_model=None):
 def split_alpha(src, model):
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
-		if isinstance(src.info.get("transparency"), bytes):
-			src = src.convert("RGBA")
+		srcRGBA = src.convert("RGBA")
+		alphas = [x[1][-1] for x in srcRGBA.getcolors(src.size[0] * src.size[1])]
+		if any(x < 255 for x in alphas):
+			print(f"Alpha channel detected in image with mode={src.mode}")
+			alpha = srcRGBA.split()[-1]
 	rgb = src.convert("RGB")
+	rgb.save("test2.png")
 	if src.mode in ("LA", "RGBA"):
 		print("Splitting alpha channel...", end=" ", flush=True)
 		alpha = src.split()[-1]

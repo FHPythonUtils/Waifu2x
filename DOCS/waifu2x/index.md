@@ -29,7 +29,7 @@ def denoise_image(cfg, src, model):
 
 ## load_models
 
-[[find in source code]](../../waifu2x/__init__.py#L74)
+[[find in source code]](../../waifu2x/__init__.py#L78)
 
 ```python
 def load_models(cfg):
@@ -37,7 +37,7 @@ def load_models(cfg):
 
 ## main
 
-[[find in source code]](../../waifu2x/__init__.py#L117)
+[[find in source code]](../../waifu2x/__init__.py#L121)
 
 ```python
 def main():
