@@ -11,7 +11,7 @@
 
 ## Namespace
 
-[[find in source code]](../../waifu2x/utils.py#L7)
+[[find in source code]](../../waifu2x/utils.py#L9)
 
 ```python
 class Namespace():
@@ -20,7 +20,7 @@ class Namespace():
 
 ### Namespace().append
 
-[[find in source code]](../../waifu2x/utils.py#L19)
+[[find in source code]](../../waifu2x/utils.py#L21)
 
 ```python
 def append(key, value):
@@ -28,24 +28,24 @@ def append(key, value):
 
 ## get_config
 
-[[find in source code]](../../waifu2x/utils.py#L24)
+[[find in source code]](../../waifu2x/utils.py#L26)
 
 ```python
-def get_config(base, model, train=True):
+def get_config(base, model, train: bool = True):
 ```
 
 ## load_filelist
 
-[[find in source code]](../../waifu2x/utils.py#L73)
+[[find in source code]](../../waifu2x/utils.py#L75)
 
 ```python
-def load_filelist(dir, shuffle=False):
+def load_filelist(directory: str, shuffle: bool = False):
 ```
 
 ## set_random_seed
 
-[[find in source code]](../../waifu2x/utils.py#L64)
+[[find in source code]](../../waifu2x/utils.py#L66)
 
 ```python
-def set_random_seed(seed, gpu=-1):
+def set_random_seed(seed, gpu: int = -1):
 ```

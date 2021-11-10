@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import chainer
 import numpy as np
 from PIL import Image
 
 
-def _get_padding_size(size, block_size, offset):
+def _get_padding_size(size: int, block_size: int, offset: int) -> int:
 	pad = size % block_size
 	if pad == 0:
 		pad = offset
@@ -12,7 +14,7 @@ def _get_padding_size(size, block_size, offset):
 	return pad
 
 
-def blockwise(src, model, block_size, batch_size):
+def blockwise(src, model, block_size: int, batch_size: int):
 	if src.ndim == 2:
 		src = src[:, :, np.newaxis]
 	xp = model.xp
@@ -60,14 +62,13 @@ def blockwise(src, model, block_size, batch_size):
 	return dst.transpose(1, 2, 0)
 
 
-def inv(rot, flip=False):
+def inv(rot: int, flip: bool = False):
 	if flip:
 		return lambda x: np.rot90(x, rot // 90, axes=(0, 1))[:, ::-1, :]
-	else:
-		return lambda x: np.rot90(x, rot // 90, axes=(0, 1))
+	return lambda x: np.rot90(x, rot // 90, axes=(0, 1))
 
 
-def get_tta_patterns(src, n):
+def get_tta_patterns(src, n: int):
 	src_lr = src.transpose(Image.FLIP_LEFT_RIGHT)
 	patterns = [
 		[src, None],
@@ -81,26 +82,26 @@ def get_tta_patterns(src, n):
 	]
 	if n == 2:
 		return [patterns[0], patterns[4]]
-	elif n == 4:
+	if n == 4:
 		return [patterns[0], patterns[2], patterns[4], patterns[6]]
-	elif n == 8:
+	if n == 8:
 		return patterns
 	return [patterns[0]]
 
 
-def image_tta(src, model, tta_level, block_size, batch_size):
+def image_tta(src, model, tta_level: int, block_size: int, batch_size: int):
 	inner_scale = model.inner_scale
 	dst = np.zeros((src.size[1] * inner_scale, src.size[0] * inner_scale, 3))
 	patterns = get_tta_patterns(src, tta_level)
 	if model.ch == 1:
-		for i, (pat, inv) in enumerate(patterns):
+		for i, (pat, inv_) in enumerate(patterns):
 			print(i, end=" ", flush=True)
 			pat = np.array(pat.convert("YCbCr"), dtype=np.uint8)
 			if i == 0:
 				cbcr = pat[:, :, 1:]
 			tmp = blockwise(pat[:, :, 0], model, block_size, batch_size)
-			if inv is not None:
-				tmp = inv(tmp)
+			if inv_ is not None:
+				tmp = inv_(tmp)
 			dst[:, :, 0] += tmp[:, :, 0]
 		dst /= len(patterns)
 		dst = np.clip(dst, 0, 1) * 255
@@ -108,12 +109,12 @@ def image_tta(src, model, tta_level, block_size, batch_size):
 		dst = dst.astype(np.uint8)
 		dst = Image.fromarray(dst, mode="YCbCr").convert("RGB")
 	elif model.ch == 3:
-		for i, (pat, inv) in enumerate(patterns):
+		for i, (pat, inv_) in enumerate(patterns):
 			print(i, end=" ", flush=True)
 			pat = np.array(pat, dtype=np.uint8)
 			tmp = blockwise(pat, model, block_size, batch_size)
-			if inv is not None:
-				tmp = inv(tmp)
+			if inv_ is not None:
+				tmp = inv_(tmp)
 			dst += tmp
 		dst /= len(patterns)
 		dst = np.clip(dst, 0, 1) * 255
@@ -121,9 +122,9 @@ def image_tta(src, model, tta_level, block_size, batch_size):
 	return dst
 
 
-def image(src, model, block_size, batch_size):
+def image(src, model, block_size: int, batch_size: int) -> Image.Image:
 	if src is None:
-		return None
+		raise RuntimeError("Image cannot be None")
 	if model.ch == 1:
 		y2rgb = src.mode == "L"
 		src = np.array(src.convert("YCbCr"), dtype=np.uint8)

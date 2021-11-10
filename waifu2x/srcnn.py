@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import chainer
 import chainer.functions as F
 import chainer.links as L
@@ -31,7 +33,7 @@ class VGG7(chainer.Chain):
 
 
 class UpConv7(chainer.Chain):
-	def __init__(self, ch):
+	def __init__(self, ch: int):
 		super().__init__()
 		with self.init_scope():
 			self.conv1 = L.Convolution2D(ch, 16, 3)
@@ -58,7 +60,9 @@ class UpConv7(chainer.Chain):
 
 
 class ResBlock(chainer.Chain):
-	def __init__(self, in_channels, out_channels, slope=0.1, r=16, se=False):
+	def __init__(
+		self, in_channels, out_channels, slope: float = 0.1, r: int = 16, se: bool = False
+	):
 		super().__init__()
 		with self.init_scope():
 			self.conv1 = L.Convolution2D(in_channels, out_channels, 3)

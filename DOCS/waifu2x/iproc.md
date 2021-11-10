@@ -14,47 +14,50 @@
 
 ## alpha_make_border
 
-[[find in source code]](../../waifu2x/iproc.py#L14)
+[[find in source code]](../../waifu2x/iproc.py#L16)
 
 ```python
-def alpha_make_border(rgb, alpha, model):
+def alpha_make_border(rgb: Image.Image, alpha: Image.Image | None, model):
 ```
 
 ## array_to_wand
 
-[[find in source code]](../../waifu2x/iproc.py#L61)
+[[find in source code]](../../waifu2x/iproc.py#L63)
 
 ```python
-def array_to_wand(src):
+def array_to_wand(src: np.ndarray):
 ```
 
 ## clipped_psnr
 
-[[find in source code]](../../waifu2x/iproc.py#L108)
+[[find in source code]](../../waifu2x/iproc.py#L110)
 
 ```python
-def clipped_psnr(y, t, a_min=0.0, a_max=1.0):
+def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0):
 ```
 
 ## jpeg
 
-[[find in source code]](../../waifu2x/iproc.py#L95)
+[[find in source code]](../../waifu2x/iproc.py#L97)
 
 ```python
-def jpeg(src, sampling_factor='1x1,1x1,1x1', quality=90):
+def jpeg(src, sampling_factor: str = '1x1,1x1,1x1', quality: int = 90):
 ```
 
 ## nn_scaling
 
-[[find in source code]](../../waifu2x/iproc.py#L78)
+[[find in source code]](../../waifu2x/iproc.py#L80)
 
 ```python
-def nn_scaling(src, ratio):
+def nn_scaling(
+    src: Image.Image | np.ndarray | None,
+    ratio: int,
+) -> Image.Image | np.ndarray | None:
 ```
 
 ## pcacov
 
-[[find in source code]](../../waifu2x/iproc.py#L102)
+[[find in source code]](../../waifu2x/iproc.py#L104)
 
 ```python
 def pcacov(x):
@@ -62,16 +65,16 @@ def pcacov(x):
 
 ## read_image_rgb_uint8
 
-[[find in source code]](../../waifu2x/iproc.py#L44)
+[[find in source code]](../../waifu2x/iproc.py#L46)
 
 ```python
-def read_image_rgb_uint8(path):
+def read_image_rgb_uint8(path: str):
 ```
 
 ## wand_to_array
 
-[[find in source code]](../../waifu2x/iproc.py#L70)
+[[find in source code]](../../waifu2x/iproc.py#L72)
 
 ```python
-def wand_to_array(src):
+def wand_to_array(src: wand.image.Image):
 ```

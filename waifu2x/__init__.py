@@ -1,10 +1,14 @@
+from __future__ import annotations
+
 import argparse
 import os
+import sys
 import time
 from pathlib import Path
 
-import chainer
 import numpy as np
+from chainer.backends import cuda
+from chainer.serializers.npz import load_npz
 from PIL import Image
 
 from . import iproc, reconstruct, srcnn, utils
@@ -12,13 +16,13 @@ from . import iproc, reconstruct, srcnn, utils
 THISDIR = str(Path(__file__).resolve().parent)
 
 
-def denoise_image(cfg, src, model):
+def denoise_image(args: argparse.Namespace, src: Image.Image, model) -> Image.Image:
 	dst, alpha = split_alpha(src, model)
-	print(f"Level {cfg.noise_level} denoising...", end=" ", flush=True)
-	if cfg.tta:
-		dst = reconstruct.image_tta(dst, model, cfg.tta_level, cfg.block_size, cfg.batch_size)
+	print(f"Level {args.noise_level} denoising...", end=" ", flush=True)
+	if args.tta:
+		dst = reconstruct.image_tta(dst, model, args.tta_level, args.block_size, args.batch_size)
 	else:
-		dst = reconstruct.image(dst, model, cfg.block_size, cfg.batch_size)
+		dst = reconstruct.image(dst, model, args.block_size, args.batch_size)
 	if model.inner_scale != 1:
 		dst = dst.resize((src.size[0], src.size[1]), Image.LANCZOS)
 	print("OK")
@@ -27,25 +31,29 @@ def denoise_image(cfg, src, model):
 	return dst
 
 
-def upscale_image(cfg, src, scale_model, alpha_model=None):
+def upscale_image(
+	args: argparse.Namespace, src: Image.Image, scale_model, alpha_model=None
+) -> Image.Image:
 	dst, alpha = split_alpha(src, scale_model)
-	for i in range(int(np.ceil(np.log2(cfg.scale_ratio)))):
+	for i in range(int(np.ceil(np.log2(args.scale_ratio)))):
 		print("2.0x scaling...", end=" ", flush=True)
 		model = scale_model if i == 0 or alpha_model is None else alpha_model
 		if model.inner_scale == 1:
 			dst = iproc.nn_scaling(dst, 2)  # Nearest neighbor 2x scaling
 			alpha = iproc.nn_scaling(alpha, 2)  # Nearest neighbor 2x scaling
-		if cfg.tta:
-			dst = reconstruct.image_tta(dst, model, cfg.tta_level, cfg.block_size, cfg.batch_size)
+		if args.tta:
+			dst = reconstruct.image_tta(
+				dst, model, args.tta_level, args.block_size, args.batch_size
+			)
 		else:
-			dst = reconstruct.image(dst, model, cfg.block_size, cfg.batch_size)
+			dst = reconstruct.image(dst, model, args.block_size, args.batch_size)
 		if alpha_model is None:
-			alpha = reconstruct.image(alpha, scale_model, cfg.block_size, cfg.batch_size)
+			alpha = reconstruct.image(alpha, scale_model, args.block_size, args.batch_size)
 		else:
-			alpha = reconstruct.image(alpha, alpha_model, cfg.block_size, cfg.batch_size)
+			alpha = reconstruct.image(alpha, alpha_model, args.block_size, args.batch_size)
 		print("OK")
-	dst_w = int(np.round(src.size[0] * cfg.scale_ratio))
-	dst_h = int(np.round(src.size[1] * cfg.scale_ratio))
+	dst_w = int(np.round(src.size[0] * args.scale_ratio))
+	dst_h = int(np.round(src.size[1] * args.scale_ratio))
 	if dst_w != dst.size[0] or dst_h != dst.size[1]:
 		print("Resizing...", end=" ", flush=True)
 		dst = dst.resize((dst_w, dst_h), Image.LANCZOS)
@@ -57,7 +65,7 @@ def upscale_image(cfg, src, scale_model, alpha_model=None):
 	return dst
 
 
-def split_alpha(src, model):
+def split_alpha(src: Image.Image, model) -> tuple[Image.Image, Image.Image | None]:
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
 		srcRGBA = src.convert("RGBA")
@@ -66,7 +74,6 @@ def split_alpha(src, model):
 			print(f"Alpha channel detected in image with mode={src.mode}")
 			alpha = srcRGBA.split()[-1]
 	rgb = src.convert("RGB")
-	rgb.save("test2.png")
 	if src.mode in ("LA", "RGBA"):
 		print("Splitting alpha channel...", end=" ", flush=True)
 		alpha = src.split()[-1]
@@ -75,50 +82,51 @@ def split_alpha(src, model):
 	return rgb, alpha
 
 
-def load_models(cfg):
-	ch = 3 if cfg.color == "rgb" else 1
-	if cfg.model_dir is None:
-		model_dir = THISDIR + f"/models/{cfg.arch.lower()}"
+def load_models(args: argparse.Namespace):
+	ch = 3 if args.color == "rgb" else 1
+	if args.model_dir is None:
+		model_dir = THISDIR + f"/models/{args.arch.lower()}"
 	else:
-		model_dir = cfg.model_dir
+		model_dir = args.model_dir
 
 	models = {}
 	flag = False
-	if cfg.method == "noise_scale":
-		model_name = f"anime_style_noise{cfg.noise_level}_scale_{cfg.color}.npz"
+	if args.method == "noise_scale":
+		model_name = f"anime_style_noise{args.noise_level}_scale_{args.color}.npz"
 		model_path = os.path.join(model_dir, model_name)
 		if os.path.exists(model_path):
-			models["noise_scale"] = srcnn.archs[cfg.arch](ch)
-			chainer.serializers.load_npz(model_path, models["noise_scale"])
-			alpha_model_name = f"anime_style_scale_{cfg.color}.npz"
+			models["noise_scale"] = srcnn.archs[args.arch](ch)
+			load_npz(model_path, models["noise_scale"])
+			alpha_model_name = f"anime_style_scale_{args.color}.npz"
 			alpha_model_path = os.path.join(model_dir, alpha_model_name)
-			models["alpha"] = srcnn.archs[cfg.arch](ch)
-			chainer.serializers.load_npz(alpha_model_path, models["alpha"])
+			models["alpha"] = srcnn.archs[args.arch](ch)
+			load_npz(alpha_model_path, models["alpha"])
 		else:
 			flag = True
-	if cfg.method == "scale" or flag:
-		model_name = f"anime_style_scale_{cfg.color}.npz"
+	if args.method == "scale" or flag:
+		model_name = f"anime_style_scale_{args.color}.npz"
 		model_path = os.path.join(model_dir, model_name)
-		models["scale"] = srcnn.archs[cfg.arch](ch)
-		chainer.serializers.load_npz(model_path, models["scale"])
-	if cfg.method == "noise" or flag:
-		model_name = f"anime_style_noise{cfg.noise_level}_{cfg.color}.npz"
+		models["scale"] = srcnn.archs[args.arch](ch)
+		load_npz(model_path, models["scale"])
+	if args.method == "noise" or flag:
+		model_name = f"anime_style_noise{args.noise_level}_{args.color}.npz"
 		model_path = os.path.join(model_dir, model_name)
 		if not os.path.exists(model_path):
-			model_name = f"anime_style_noise{cfg.noise_level}_scale_{cfg.color}.npz"
+			model_name = f"anime_style_noise{args.noise_level}_scale_{args.color}.npz"
 			model_path = os.path.join(model_dir, model_name)
-		models["noise"] = srcnn.archs[cfg.arch](ch)
-		chainer.serializers.load_npz(model_path, models["noise"])
+		models["noise"] = srcnn.archs[args.arch](ch)
+		load_npz(model_path, models["noise"])
 
-	if cfg.gpu >= 0:
-		chainer.backends.cuda.check_cuda_available()
-		chainer.backends.cuda.get_device(cfg.gpu).use()
+	if args.gpu >= 0:
+		cuda.check_cuda_available()
+		cuda.get_device(args.gpu).use()
 		for _, model in models.items():
 			model.to_gpu()
 	return models
 
 
 def main():
+	# fmt:off
 	p = argparse.ArgumentParser(description="Chainer implementation of waifu2x")
 	p.add_argument("--gpu", "-g", type=int, default=-1)
 	p.add_argument("--input", "-i", default="images/small.png")
@@ -130,12 +138,7 @@ def main():
 	p.add_argument("--batch_size", "-b", type=int, default=16)
 	p.add_argument("--block_size", "-l", type=int, default=128)
 	p.add_argument("--extension", "-e", default="png", choices=["png", "webp"])
-	p.add_argument(
-		"--arch",
-		"-a",
-		default="VGG7",
-		choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"],
-	)
+	p.add_argument("--arch", "-a", default="VGG7", choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
 	p.add_argument("--method", "-m", default="scale", choices=["noise", "scale", "noise_scale"])
 	p.add_argument("--noise_level", "-n", type=int, default=1, choices=[0, 1, 2, 3])
 	p.add_argument("--color", "-c", default="rgb", choices=["y", "rgb"])
@@ -145,6 +148,7 @@ def main():
 	g.add_argument("--height", "-H", type=int, default=0)
 	g.add_argument("--shorter_side", "-S", type=int, default=0)
 	g.add_argument("--longer_side", "-L", type=int, default=0)
+	# fmt:on
 
 	args = p.parse_args()
 	if args.arch in srcnn.table:
@@ -175,6 +179,9 @@ def main():
 		os.makedirs(outdir)
 
 	for path in filelist:
+		if not Path(path).exists():
+			p.print_help()
+			sys.exit(1)
 		tmpname, tmpext = os.path.splitext(os.path.basename(path))
 		if outname is None or len(filelist) > 1:
 			outname = tmpname
@@ -210,7 +217,7 @@ def main():
 				if "scale" in models:
 					outname += f"(scale{args.scale_ratio:.1f}x)"
 					dst = upscale_image(args, dst, models["scale"])
-			print("Elapsed time: {:.6f} sec".format(time.time() - start))
+			print(f"Elapsed time: {time.time() - start:.6f} sec")
 
 			outname += f"({args.arch}_{args.color}){outext}"
 			if os.path.exists(outpath):

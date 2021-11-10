@@ -1,9 +1,11 @@
+from __future__ import annotations
+
+import argparse
 import multiprocessing
 import os
 from tempfile import NamedTemporaryFile
 
 import numpy as np
-import six
 
 from . import iproc
 from .pairwise_transform import pairwise_transform
@@ -70,18 +72,18 @@ class DatasetSampler:
 		return self.dataset
 
 
-def _worker(filelist, cfg, queue, finalized):
-	sample_size = cfg.patches * len(filelist)
-	x = np.zeros((sample_size, cfg.ch, cfg.in_size, cfg.in_size), dtype=np.uint8)
-	y = np.zeros((sample_size, cfg.ch, cfg.out_size, cfg.out_size), dtype=np.uint8)
+def _worker(filelist, args: argparse.Namespace, queue, finalized):
+	sample_size = args.patches * len(filelist)
+	x = np.zeros((sample_size, args.ch, args.in_size, args.in_size), dtype=np.uint8)
+	y = np.zeros((sample_size, args.ch, args.out_size, args.out_size), dtype=np.uint8)
 
-	for i in six.moves.range(len(filelist)):
+	for i, file in enumerate(filelist):
 		if finalized.is_set():
 			break
-		img = iproc.read_image_rgb_uint8(filelist[i])
-		xc_batch, yc_batch = pairwise_transform(img, cfg)
-		x[cfg.patches * i : cfg.patches * (i + 1)] = xc_batch[:]
-		y[cfg.patches * i : cfg.patches * (i + 1)] = yc_batch[:]
+		img = iproc.read_image_rgb_uint8(file)
+		xc_batch, yc_batch = pairwise_transform(img, args)
+		x[args.patches * i : args.patches * (i + 1)] = xc_batch[:]
+		y[args.patches * i : args.patches * (i + 1)] = yc_batch[:]
 
 	with NamedTemporaryFile(delete=False) as cache:
 		np.savez(cache, x=x, y=y)

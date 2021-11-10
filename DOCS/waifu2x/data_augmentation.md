@@ -11,10 +11,10 @@
 
 ## color_noise
 
-[[find in source code]](../../waifu2x/data_augmentation.py#L21)
+[[find in source code]](../../waifu2x/data_augmentation.py#L22)
 
 ```python
-def color_noise(src, p, factor=0.1):
+def color_noise(src, p, factor: float = 0.1):
 ```
 
 ## flip
@@ -35,7 +35,7 @@ def half(src, p):
 
 ## shift_1px
 
-[[find in source code]](../../waifu2x/data_augmentation.py#L55)
+[[find in source code]](../../waifu2x/data_augmentation.py#L54)
 
 ```python
 def shift_1px(src):
@@ -43,7 +43,7 @@ def shift_1px(src):
 
 ## unsharp_mask
 
-[[find in source code]](../../waifu2x/data_augmentation.py#L9)
+[[find in source code]](../../waifu2x/data_augmentation.py#L11)
 
 ```python
 def unsharp_mask(src, p):

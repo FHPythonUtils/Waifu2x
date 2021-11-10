@@ -11,7 +11,7 @@
 
 ## DatasetSampler
 
-[[find in source code]](../../waifu2x/dataset_sampler.py#L12)
+[[find in source code]](../../waifu2x/dataset_sampler.py#L14)
 
 ```python
 class DatasetSampler():
@@ -20,7 +20,7 @@ class DatasetSampler():
 
 ### DatasetSampler().finalize
 
-[[find in source code]](../../waifu2x/dataset_sampler.py#L31)
+[[find in source code]](../../waifu2x/dataset_sampler.py#L33)
 
 ```python
 def finalize():
@@ -28,7 +28,7 @@ def finalize():
 
 ### DatasetSampler().get
 
-[[find in source code]](../../waifu2x/dataset_sampler.py#L57)
+[[find in source code]](../../waifu2x/dataset_sampler.py#L59)
 
 ```python
 def get():
@@ -36,7 +36,7 @@ def get():
 
 ### DatasetSampler().reload_switch
 
-[[find in source code]](../../waifu2x/dataset_sampler.py#L38)
+[[find in source code]](../../waifu2x/dataset_sampler.py#L40)
 
 ```python
 def reload_switch(init=True):
@@ -44,7 +44,7 @@ def reload_switch(init=True):
 
 ### DatasetSampler().wait
 
-[[find in source code]](../../waifu2x/dataset_sampler.py#L51)
+[[find in source code]](../../waifu2x/dataset_sampler.py#L53)
 
 ```python
 def wait():

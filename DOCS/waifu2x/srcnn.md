@@ -11,16 +11,22 @@
 
 ## ResBlock
 
-[[find in source code]](../../waifu2x/srcnn.py#L60)
+[[find in source code]](../../waifu2x/srcnn.py#L62)
 
 ```python
 class ResBlock(chainer.Chain):
-    def __init__(in_channels, out_channels, slope=0.1, r=16, se=False):
+    def __init__(
+        in_channels,
+        out_channels,
+        slope: float = 0.1,
+        r: int = 16,
+        se: bool = False,
+    ):
 ```
 
 ## ResNet10
 
-[[find in source code]](../../waifu2x/srcnn.py#L94)
+[[find in source code]](../../waifu2x/srcnn.py#L98)
 
 ```python
 class ResNet10(chainer.Chain):
@@ -29,16 +35,16 @@ class ResNet10(chainer.Chain):
 
 ## UpConv7
 
-[[find in source code]](../../waifu2x/srcnn.py#L33)
+[[find in source code]](../../waifu2x/srcnn.py#L35)
 
 ```python
 class UpConv7(chainer.Chain):
-    def __init__(ch):
+    def __init__(ch: int):
 ```
 
 ## UpResNet10
 
-[[find in source code]](../../waifu2x/srcnn.py#L124)
+[[find in source code]](../../waifu2x/srcnn.py#L128)
 
 ```python
 class UpResNet10(chainer.Chain):
@@ -47,7 +53,7 @@ class UpResNet10(chainer.Chain):
 
 ## VGG7
 
-[[find in source code]](../../waifu2x/srcnn.py#L6)
+[[find in source code]](../../waifu2x/srcnn.py#L8)
 
 ```python
 class VGG7(chainer.Chain):

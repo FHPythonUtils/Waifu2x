@@ -21,23 +21,27 @@
 
 ## denoise_image
 
-[[find in source code]](../../waifu2x/__init__.py#L15)
+[[find in source code]](../../waifu2x/__init__.py#L19)
 
 ```python
-def denoise_image(cfg, src, model):
+def denoise_image(
+    args: argparse.Namespace,
+    src: Image.Image,
+    model,
+) -> Image.Image:
 ```
 
 ## load_models
 
-[[find in source code]](../../waifu2x/__init__.py#L78)
+[[find in source code]](../../waifu2x/__init__.py#L85)
 
 ```python
-def load_models(cfg):
+def load_models(args: argparse.Namespace):
 ```
 
 ## main
 
-[[find in source code]](../../waifu2x/__init__.py#L121)
+[[find in source code]](../../waifu2x/__init__.py#L128)
 
 ```python
 def main():
@@ -45,16 +49,24 @@ def main():
 
 ## split_alpha
 
-[[find in source code]](../../waifu2x/__init__.py#L60)
+[[find in source code]](../../waifu2x/__init__.py#L68)
 
 ```python
-def split_alpha(src, model):
+def split_alpha(
+    src: Image.Image,
+    model,
+) -> tuple[(Image.Image, Image.Image | None)]:
 ```
 
 ## upscale_image
 
-[[find in source code]](../../waifu2x/__init__.py#L30)
+[[find in source code]](../../waifu2x/__init__.py#L34)
 
 ```python
-def upscale_image(cfg, src, scale_model, alpha_model=None):
+def upscale_image(
+    args: argparse.Namespace,
+    src: Image.Image,
+    scale_model,
+    alpha_model=None,
+) -> Image.Image:
 ```

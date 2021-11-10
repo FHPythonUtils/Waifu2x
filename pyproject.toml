@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2021.1"
+version = "2021.2"
+license = "mit"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
 classifiers = [
@@ -10,13 +11,8 @@ classifiers = [
 	"Development Status :: 5 - Production/Stable",
 	"Intended Audience :: Developers",
 	"Intended Audience :: Education",
-	"License :: OSI Approved :: MIT License",
 	"Natural Language :: English",
 	"Operating System :: OS Independent",
-	"Programming Language :: Python :: 3",
-	"Programming Language :: Python :: 3.7",
-	"Programming Language :: Python :: 3.8",
-	"Programming Language :: Python :: 3.9",
 	"Programming Language :: Python :: Implementation :: CPython",
 	"Topic :: Software Development :: Libraries :: Python Modules",
 	"Topic :: Utilities"
@@ -36,39 +32,44 @@ chainer = "<9,>=7.7.0"
 Pillow = "<10,>=8.1.2"
 Wand = "<2,>=0.6.6"
 
+[tool.black]
+line-length = 100
+target-version = ["py37"]
+
+[tool.isort]
+profile = "black"
+indent = "Tab"
+
+[tool.pydocstyle]
+convention = "google"
+ignore = "D205,D415"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-
-# Pylint
 [tool.pylint.basic]
-argument-naming-style ="snake_case"
-attr-naming-style ="snake_case"
-function-naming-style ="snake_case"
-method-naming-style ="snake_case"
-variable-naming-style ="snake_case"
+attr-naming-style = "snake_case"
+function-naming-style = "snake_case"
+method-naming-style = "snake_case"
+variable-rgx = "(([a-z0-9]*_?[a-z0-9]*)*)" #snake_case but allows x, y etc
+argument-rgx = "(([a-z0-9]*_?[a-z0-9]*)*)"
 
 [tool.pylint.format]
-indent-string ="\t"
+indent-string = "\t"
 
 [tool.pylint.master]
-ignore-patterns ="test_.*?py"
+ignore-patterns = "test_.*?py"
 
 [tool.pylint.messages_control]
-enable = [
-	'F',  # Fatal
-	'E',  # Error
-	'W',  # Warning
-	'R',  # Refactor
-	'C',  # Convention
-]
-disable=[
+enable = ["F", "E", "W", "R", "C"]
+disable = [
 	"pointless-string-statement",
 	"superfluous-parens",
 	"bad-continuation",
-	"wrong-import-position",
-	"unsubscriptable-object",
 	"python3",
+	# Need to be removed eventually
+	"missing-function-docstring",
+	"missing-module-docstring",
+	"missing-class-docstring",
 ]

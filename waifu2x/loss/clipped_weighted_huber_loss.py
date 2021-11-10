@@ -1,15 +1,19 @@
+from __future__ import annotations
+
 import numpy
 from chainer import cuda, function
 from chainer.utils import type_check
 
 
 class ClippedWeightedHuberLoss(function.Function):
-	def __init__(self, weight, delta=0.1, clip=(0.0, 1.0)):
+	def __init__(self, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)):
 		self.weight = weight
 		self.delta = delta
 		self.clip = clip
+		self.diff = None
 
 	def check_type_forward(self, in_types):
+		_ = self
 		type_check.expect(in_types.size() == 2)
 		type_check.expect(
 			in_types[0].dtype == numpy.float32,
@@ -42,5 +46,7 @@ class ClippedWeightedHuberLoss(function.Function):
 		return gx, -gx
 
 
-def clipped_weighted_huber_loss(x, t, weight, delta=0.1, clip=(0.0, 1.0)):
+def clipped_weighted_huber_loss(
+	x, t, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
+):
 	return ClippedWeightedHuberLoss(weight=weight, delta=delta, clip=clip)(x, t)

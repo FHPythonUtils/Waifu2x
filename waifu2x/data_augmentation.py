@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 
 import numpy as np
@@ -14,11 +16,10 @@ def unsharp_mask(src, p):
 		mask = ImageFilter.UnsharpMask(percent=percent, threshold=threshold)
 		dst = np.array(tmp.filter(mask), dtype=np.uint8)
 		return dst
-	else:
-		return src
+	return src
 
 
-def color_noise(src, p, factor=0.1):
+def color_noise(src, p, factor: float = 0.1):
 	if np.random.uniform() < p:
 		tmp = np.array(src, dtype=np.float32) / 255.0
 		scale = np.random.normal(0, factor, 3)
@@ -26,8 +27,7 @@ def color_noise(src, p, factor=0.1):
 		noise = cv.dot(ce.T * scale)[np.newaxis, np.newaxis, :]
 		dst = np.clip(tmp + noise, 0, 1) * 255
 		return dst.astype(np.uint8)
-	else:
-		return src
+	return src
 
 
 def flip(src):
@@ -48,8 +48,7 @@ def half(src, p):
 		rand = random.randint(0, len(filters) - 1)
 		dst = iproc.scale(src, 0.5, filters[rand])
 		return dst
-	else:
-		return src
+	return src
 
 
 def shift_1px(src):

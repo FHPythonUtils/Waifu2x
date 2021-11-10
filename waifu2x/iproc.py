@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import io
 
 import chainer
@@ -11,7 +13,7 @@ except ImportError:
 	pass
 
 
-def alpha_make_border(rgb, alpha, model):
+def alpha_make_border(rgb: Image.Image, alpha: Image.Image | None, model):
 	xp = model.xp
 	sum2d = L.Convolution2D(1, 1, 3, 1, 1, nobias=True, initialW=1)
 	if xp == chainer.backends.cuda.cupy:
@@ -41,7 +43,7 @@ def alpha_make_border(rgb, alpha, model):
 	return Image.fromarray(rgb.transpose(1, 2, 0).astype(np.uint8))
 
 
-def read_image_rgb_uint8(path):
+def read_image_rgb_uint8(path: str):
 	src = Image.open(path)
 	if src.mode in ("L", "RGB", "P"):
 		if isinstance(src.info.get("transparency"), bytes):
@@ -58,7 +60,7 @@ def read_image_rgb_uint8(path):
 	return dst
 
 
-def array_to_wand(src):
+def array_to_wand(src: np.ndarray):
 	assert isinstance(src, np.ndarray)
 	with io.BytesIO() as buf:
 		tmp = Image.fromarray(src).convert("RGB")
@@ -67,7 +69,7 @@ def array_to_wand(src):
 	return dst
 
 
-def wand_to_array(src):
+def wand_to_array(src: wand.image.Image):
 	assert isinstance(src, wand.image.Image)
 	with io.BytesIO(src.make_blob("PNG")) as buf:
 		tmp = Image.open(buf).convert("RGB")
@@ -75,7 +77,7 @@ def wand_to_array(src):
 	return dst
 
 
-def nn_scaling(src, ratio):
+def nn_scaling(src: Image.Image | np.ndarray | None, ratio: int) -> Image.Image | np.ndarray | None:
 	if src is None:
 		return None
 
@@ -92,7 +94,7 @@ def nn_scaling(src, ratio):
 	return dst
 
 
-def jpeg(src, sampling_factor="1x1,1x1,1x1", quality=90):
+def jpeg(src, sampling_factor: str = "1x1,1x1,1x1", quality: int = 90):
 	src.format = "jpg"
 	src.compression_quality = quality
 	src.options["jpeg:sampling-factor"] = sampling_factor
@@ -105,7 +107,7 @@ def pcacov(x):
 	return ce, cv
 
 
-def clipped_psnr(y, t, a_min=0.0, a_max=1.0):
+def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0):
 	xp = chainer.backends.cuda.get_array_module(y)
 	y_c = xp.clip(y, a_min, a_max)
 	t_c = xp.clip(t, a_min, a_max)

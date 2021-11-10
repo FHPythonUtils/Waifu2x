@@ -13,56 +13,56 @@
 
 ## active_cropping
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L93)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L94)
 
 ```python
-def active_cropping(x, y, ly, size, scale, p, tries):
+def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int):
 ```
 
 ## crop_if_large
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L74)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L75)
 
 ```python
-def crop_if_large(src, max_size):
+def crop_if_large(src, max_size: int):
 ```
 
 ## noise
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L38)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L40)
 
 ```python
-def noise(src, p, p_chroma, level):
+def noise(src, p, p_chroma, level: int):
 ```
 
 ## noise_scale
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L60)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L61)
 
 ```python
-def noise_scale(src, filters, bmin, bmax, scale, p, p_chroma, level):
+def noise_scale(src, filters, bmin, bmax, scale_, p, p_chroma, level: int):
 ```
 
 ## pairwise_transform
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L121)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L126)
 
 ```python
-def pairwise_transform(src, cfg):
+def pairwise_transform(src, args: argparse.Namespace):
 ```
 
 ## preprocess
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L83)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L84)
 
 ```python
-def preprocess(src, cfg):
+def preprocess(src, args: argparse.Namespace):
 ```
 
 ## scale
 
-[[find in source code]](../../waifu2x/pairwise_transform.py#L48)
+[[find in source code]](../../waifu2x/pairwise_transform.py#L49)
 
 ```python
-def scale(src, filters, bmin, bmax, scale):
+def scale(src, filters, bmin, bmax, scale_):
 ```

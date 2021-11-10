@@ -11,40 +11,40 @@
 
 ## blockwise
 
-[[find in source code]](../../waifu2x/reconstruct.py#L15)
+[[find in source code]](../../waifu2x/reconstruct.py#L17)
 
 ```python
-def blockwise(src, model, block_size, batch_size):
+def blockwise(src, model, block_size: int, batch_size: int):
 ```
 
 ## get_tta_patterns
 
-[[find in source code]](../../waifu2x/reconstruct.py#L70)
+[[find in source code]](../../waifu2x/reconstruct.py#L71)
 
 ```python
-def get_tta_patterns(src, n):
+def get_tta_patterns(src, n: int):
 ```
 
 ## image
 
-[[find in source code]](../../waifu2x/reconstruct.py#L124)
+[[find in source code]](../../waifu2x/reconstruct.py#L125)
 
 ```python
-def image(src, model, block_size, batch_size):
+def image(src, model, block_size: int, batch_size: int) -> Image.Image:
 ```
 
 ## image_tta
 
-[[find in source code]](../../waifu2x/reconstruct.py#L91)
+[[find in source code]](../../waifu2x/reconstruct.py#L92)
 
 ```python
-def image_tta(src, model, tta_level, block_size, batch_size):
+def image_tta(src, model, tta_level: int, block_size: int, batch_size: int):
 ```
 
 ## inv
 
-[[find in source code]](../../waifu2x/reconstruct.py#L63)
+[[find in source code]](../../waifu2x/reconstruct.py#L65)
 
 ```python
-def inv(rot, flip=False):
+def inv(rot: int, flip: bool = False):
 ```

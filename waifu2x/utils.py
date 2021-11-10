@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import random
 
@@ -11,17 +13,17 @@ class Namespace:
 			setattr(self, key, kwargs[key])
 
 	def __repr__(self):
-		str = []
+		string = []
 		for key in self.kwargs.keys():
-			str.append("{}={}".format(key, self.kwargs[key]))
-		return ", ".join(str)
+			string.append(f"{key}={self.kwargs[key]}")
+		return ", ".join(string)
 
 	def append(self, key, value):
 		self.kwargs[key] = value
 		setattr(self, key, value)
 
 
-def get_config(base, model, train=True):
+def get_config(base, model, train: bool = True):
 	ch = model.ch
 	offset = model.offset
 	inner_scale = model.inner_scale
@@ -61,7 +63,7 @@ def get_config(base, model, train=True):
 	return Namespace(config)
 
 
-def set_random_seed(seed, gpu=-1):
+def set_random_seed(seed, gpu: int = -1):
 	random.seed(seed)
 	np.random.seed(seed)
 	if gpu >= 0:
@@ -70,11 +72,11 @@ def set_random_seed(seed, gpu=-1):
 		cupy.random.seed(seed)
 
 
-def load_filelist(dir, shuffle=False):
-	files = os.listdir(dir)
+def load_filelist(directory: str, shuffle: bool = False):
+	files = os.listdir(directory)
 	datalist = []
 	for file in files:
-		path = os.path.join(dir, file)
+		path = os.path.join(directory, file)
 		if os.path.isfile(path):
 			datalist.append(path)
 	if shuffle:
