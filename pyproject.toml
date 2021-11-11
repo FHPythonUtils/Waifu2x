@@ -67,7 +67,6 @@ disable = [
 	"pointless-string-statement",
 	"superfluous-parens",
 	"bad-continuation",
-	"python3",
 	# Need to be removed eventually
 	"missing-function-docstring",
 	"missing-module-docstring",
