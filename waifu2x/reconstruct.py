@@ -124,7 +124,8 @@ def image_tta(src, model, tta_level: int, block_size: int, batch_size: int):
 
 def image(src, model, block_size: int, batch_size: int) -> Image.Image:
 	if src is None:
-		raise RuntimeError("Image cannot be None")
+		return src
+		# raise RuntimeError("Image cannot be None")
 	if model.ch == 1:
 		y2rgb = src.mode == "L"
 		src = np.array(src.convert("YCbCr"), dtype=np.uint8)
