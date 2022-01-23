@@ -1,5 +1,4 @@
 requirements_optional.txt
-test*
 poetry.lock
 
 # Byte-compiled / optimized / DLL files
