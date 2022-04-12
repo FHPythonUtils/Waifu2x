@@ -6,6 +6,7 @@ import sys
 import time
 from pathlib import Path
 
+import chainer
 import numpy as np
 from chainer.backends import cuda
 from chainer.serializers.npz import load_npz
@@ -16,7 +17,17 @@ from . import iproc, reconstruct, srcnn, utils
 THISDIR = str(Path(__file__).resolve().parent)
 
 
-def denoise_image(args: argparse.Namespace, src: Image.Image, model) -> Image.Image:
+def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Chain) -> Image.Image:
+	"""Remove noise from an image (src) using a scale model and an alpha model
+
+	Args:
+		args (argparse.Namespace): argparse namespace containing config such as the block_size
+		src (Image.Image): Pillow image to remove noise from
+		scale_model (chainer.Chain): model to use for scaling
+
+	Returns:
+		Image.Image: Pillow image with noise removed
+	"""
 	dst, alpha = split_alpha(src, model)
 	print(f"Level {args.noise_level} denoising...", end=" ", flush=True)
 	if args.tta:
@@ -32,8 +43,22 @@ def denoise_image(args: argparse.Namespace, src: Image.Image, model) -> Image.Im
 
 
 def upscale_image(
-	args: argparse.Namespace, src: Image.Image, scale_model, alpha_model=None
+	args: argparse.Namespace,
+	src: Image.Image,
+	scale_model: chainer.Chain,
+	alpha_model: chainer.Chain | None = None,
 ) -> Image.Image:
+	"""Upscale an image (src) using a scale model and an alpha model
+
+	Args:
+		args (argparse.Namespace): argparse namespace containing config such as the scale_ratio and block size
+		src (Image.Image): Pillow image to upscale
+		scale_model (chainer.Chain): model to use for scaling
+		alpha_model (chainer.Chain, optional): model to use for alpha. Defaults to None.
+
+	Returns:
+		Image.Image: upscaled Pillow image
+	"""
 	dst, alpha = split_alpha(src, scale_model)
 	for i in range(int(np.ceil(np.log2(args.scale_ratio)))):
 		print("2.0x scaling...", end=" ", flush=True)
@@ -65,7 +90,7 @@ def upscale_image(
 	return dst
 
 
-def split_alpha(src: Image.Image, model) -> tuple[Image.Image, Image.Image | None]:
+def split_alpha(src: Image.Image, model: chainer.Chain) -> tuple[Image.Image, Image.Image | None]:
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
 		srcRGBA = src.convert("RGBA")
@@ -82,7 +107,15 @@ def split_alpha(src: Image.Image, model) -> tuple[Image.Image, Image.Image | Non
 	return rgb, alpha
 
 
-def load_models(args: argparse.Namespace):
+def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]:
+	"""Load models using a args config
+
+	Args:
+		args (argparse.Namespace): argparse namespace containing config such as the arch and color
+
+	Returns:
+		dict[str, chainer.Chain]: Mapping of model names to chainer.Chain models
+	"""
 	ch = 3 if args.color == "rgb" else 1
 	if args.model_dir is None:
 		model_dir = THISDIR + f"/models/{args.arch.lower()}"
@@ -125,19 +158,24 @@ def load_models(args: argparse.Namespace):
 	return models
 
 
-def main():
+def main():  # pragma: no cover
+	"""Main entry point to the program
+
+	Raises:
+		ValueError: Output file extension not supported
+	"""
 	# fmt:off
 	p = argparse.ArgumentParser(description="Chainer implementation of waifu2x")
-	p.add_argument("--gpu", "-g", type=int, default=-1)
-	p.add_argument("--input", "-i", default="images/small.png")
-	p.add_argument("--output", "-o", default="./")
-	p.add_argument("--quality", "-q", type=int, default=None)
-	p.add_argument("--model_dir", "-d", default=None)
-	p.add_argument("--scale_ratio", "-s", type=float, default=2.0)
+	p.add_argument("--gpu", "-g", type=int, default=-1, help="CUDA enabled GPU to use")
+	p.add_argument("--input", "-i", default="images/small.png", help="Input image/ directory")
+	p.add_argument("--output", "-o", default="./", help="Directory to write output images to")
+	p.add_argument("--quality", "-q", type=int, default=None, help="Set the quality of output images 1-100 (None=100)")
+	p.add_argument("--model_dir", "-d", default=None, help="Specify a custom directory containing models")
+	p.add_argument("--scale_ratio", "-s", type=float, default=2.0, help="Specify a scale")
 	p.add_argument("--tta", "-t", action="store_true")
 	p.add_argument("--batch_size", "-b", type=int, default=16)
 	p.add_argument("--block_size", "-l", type=int, default=128)
-	p.add_argument("--extension", "-e", default="png", choices=["png", "webp"])
+	p.add_argument("--extension", "-e", default="png", choices=["png", "webp"], help="Select output extension png/webp")
 	p.add_argument("--arch", "-a", default="VGG7", choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
 	p.add_argument("--method", "-m", default="scale", choices=["noise", "scale", "noise_scale"])
 	p.add_argument("--noise_level", "-n", type=int, default=1, choices=[0, 1, 2, 3])
@@ -233,5 +271,5 @@ def main():
 			print(f"Saved as '{outpath}'")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
 	main()

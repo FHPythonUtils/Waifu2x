@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 
 import chainer
+import chainer.backends.cuda
 import chainer.links as L
 import numpy as np
 from PIL import Image
@@ -13,7 +14,7 @@ except ImportError:
 	pass
 
 
-def alpha_make_border(rgb: Image.Image, alpha: Image.Image | None, model):
+def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.Chain):
 	xp = model.xp
 	sum2d = L.Convolution2D(1, 1, 3, 1, 1, nobias=True, initialW=1)
 	if xp == chainer.backends.cuda.cupy:
@@ -101,7 +102,7 @@ def jpeg(src, sampling_factor: str = "1x1,1x1,1x1", quality: int = 90):
 	return wand.image.Image(blob=src.make_blob())
 
 
-def pcacov(x):
+def pcacov(x: np.ndarray):
 	imcol = x.reshape(3, x.shape[0] * x.shape[1])
 	ce, cv = np.linalg.eigh(np.cov(imcol))
 	return ce, cv

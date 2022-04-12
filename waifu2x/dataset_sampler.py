@@ -37,7 +37,7 @@ class DatasetSampler:
 			self.worker.join()
 			os.remove(garbage)
 
-	def reload_switch(self, init=True):
+	def reload_switch(self, init: bool = True):
 		self._init = init
 		self._reload = True
 
@@ -72,7 +72,7 @@ class DatasetSampler:
 		return self.dataset
 
 
-def _worker(filelist, args: argparse.Namespace, queue, finalized):
+def _worker(filelist: list[str], args: argparse.Namespace, queue, finalized):
 	sample_size = args.patches * len(filelist)
 	x = np.zeros((sample_size, args.ch, args.in_size, args.in_size), dtype=np.uint8)
 	y = np.zeros((sample_size, args.ch, args.out_size, args.out_size), dtype=np.uint8)

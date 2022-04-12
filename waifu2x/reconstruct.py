@@ -14,7 +14,7 @@ def _get_padding_size(size: int, block_size: int, offset: int) -> int:
 	return pad
 
 
-def blockwise(src, model, block_size: int, batch_size: int):
+def blockwise(src: np.ndarray, model: chainer.Chain, block_size: int, batch_size: int):
 	if src.ndim == 2:
 		src = src[:, :, np.newaxis]
 	xp = model.xp
@@ -68,7 +68,7 @@ def inv(rot: int, flip: bool = False):
 	return lambda x: np.rot90(x, rot // 90, axes=(0, 1))
 
 
-def get_tta_patterns(src, n: int):
+def get_tta_patterns(src: np.ndarray, n: int):
 	src_lr = src.transpose(Image.FLIP_LEFT_RIGHT)
 	patterns = [
 		[src, None],
@@ -89,7 +89,9 @@ def get_tta_patterns(src, n: int):
 	return [patterns[0]]
 
 
-def image_tta(src, model, tta_level: int, block_size: int, batch_size: int):
+def image_tta(
+	src: Image.Image, model: chainer.Chain, tta_level: int, block_size: int, batch_size: int
+):
 	inner_scale = model.inner_scale
 	dst = np.zeros((src.size[1] * inner_scale, src.size[0] * inner_scale, 3))
 	patterns = get_tta_patterns(src, tta_level)

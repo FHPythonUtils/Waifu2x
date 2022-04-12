@@ -9,7 +9,7 @@ from PIL import Image
 from . import data_augmentation, iproc
 
 
-def _noise(src, p, level: int):
+def _noise(src, p: np.ndarray, level: int):
 	# YUV 444
 	sampling_factor = "1x1,1x1,1x1"
 	if np.random.uniform() < p:
@@ -37,7 +37,7 @@ def _noise(src, p, level: int):
 	raise ValueError(f"Unknown noise level: {level}")
 
 
-def noise(src, p, p_chroma, level: int):
+def noise(src: np.ndarray, p: np.ndarray, p_chroma, level: int):
 	if np.random.uniform() < p:
 		with iproc.array_to_wand(src) as tmp:
 			tmp = _noise(tmp, p_chroma, level)
@@ -46,7 +46,7 @@ def noise(src, p, p_chroma, level: int):
 	return src
 
 
-def scale(src, filters, bmin, bmax, scale_):
+def scale(src: np.ndarray, filters, bmin, bmax, scale_):
 	h, w = src.shape[:2]
 	blur = np.random.uniform(bmin, bmax)
 	rand = random.randint(0, len(filters) - 1)
@@ -58,7 +58,9 @@ def scale(src, filters, bmin, bmax, scale_):
 	return dst
 
 
-def noise_scale(src, filters, bmin, bmax, scale_, p, p_chroma, level: int):
+def noise_scale(
+	src: np.ndarray, filters, bmin: float, bmax: float, scale_, p: np.ndarray, p_chroma, level: int
+):
 	h, w = src.shape[:2]
 	blur = np.random.uniform(bmin, bmax)
 	rand = random.randint(0, len(filters) - 1)
@@ -72,7 +74,7 @@ def noise_scale(src, filters, bmin, bmax, scale_, p, p_chroma, level: int):
 	return dst
 
 
-def crop_if_large(src, max_size: int):
+def crop_if_large(src: np.ndarray, max_size: int):
 	if max_size > 0 and src.shape[1] > max_size and src.shape[0] > max_size:
 		point_x = random.randint(0, src.shape[1] - max_size)
 		point_y = random.randint(0, src.shape[0] - max_size)
@@ -81,7 +83,7 @@ def crop_if_large(src, max_size: int):
 	return src
 
 
-def preprocess(src, args: argparse.Namespace):
+def preprocess(src: np.ndarray, args: argparse.Namespace):
 	dst = data_augmentation.half(src, args.random_half_rate)
 	dst = crop_if_large(dst, args.max_size)
 	dst = data_augmentation.flip(dst)
@@ -123,7 +125,7 @@ def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int):
 	return crop_x, crop_y
 
 
-def pairwise_transform(src, args: argparse.Namespace):
+def pairwise_transform(src: np.ndarray, args: argparse.Namespace):
 	unstable_region_offset_x = 8
 	unstable_region_offset_y = unstable_region_offset_x * args.inner_scale
 	top = args.offset

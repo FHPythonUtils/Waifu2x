@@ -8,7 +8,7 @@ from PIL import Image, ImageFilter
 from . import iproc
 
 
-def unsharp_mask(src, p):
+def unsharp_mask(src: np.ndarray, p) -> np.ndarray:
 	if np.random.uniform() < p:
 		tmp = Image.fromarray(src)
 		percent = random.randint(10, 90)
@@ -19,7 +19,7 @@ def unsharp_mask(src, p):
 	return src
 
 
-def color_noise(src, p, factor: float = 0.1):
+def color_noise(src: np.ndarray, p, factor: float = 0.1) -> np.ndarray:
 	if np.random.uniform() < p:
 		tmp = np.array(src, dtype=np.float32) / 255.0
 		scale = np.random.normal(0, factor, 3)
@@ -30,7 +30,7 @@ def color_noise(src, p, factor: float = 0.1):
 	return src
 
 
-def flip(src):
+def flip(src: np.ndarray) -> np.ndarray:
 	rand = random.randint(0, 3)
 	dst = src
 	if rand == 0:
@@ -42,7 +42,7 @@ def flip(src):
 	return dst
 
 
-def half(src, p):
+def half(src: np.ndarray, p: np.ndarray) -> np.ndarray:
 	if np.random.uniform() < p:
 		filters = ("box", "box", "blackman", "cubic", "lanczos")
 		rand = random.randint(0, len(filters) - 1)
@@ -51,7 +51,7 @@ def half(src, p):
 	return src
 
 
-def shift_1px(src):
+def shift_1px(src: np.ndarray) -> np.ndarray:
 	rand = random.randint(0, 3)
 	x_shift = 0
 	y_shift = 0

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2022"
+version = "2022.1"
 license = "mit"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
@@ -34,7 +34,10 @@ Wand = "<2,>=0.6.7"
 
 [tool.poetry.dev-dependencies]
 imgcompare = "^2.0.1"
-pytest = "^6.2.5"
+pytest = "^7.1.1"
+pylint = "^2.13.5"
+handsdown = "^1.1.0"
+coverage = "^6.3.2"
 
 [tool.black]
 line-length = 100

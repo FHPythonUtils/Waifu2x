@@ -77,7 +77,7 @@ def test_foreground_jpg():
 	)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
 	test_background_png()
 	test_background_jpg()
 	test_foreground_png()

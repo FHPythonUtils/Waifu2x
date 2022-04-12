@@ -1,8 +1,8 @@
-# srcnn
+# Srcnn
 
-> Auto-generated documentation for [waifu2x.srcnn](../../waifu2x/srcnn.py) module.
+> Auto-generated documentation for [waifu2x.srcnn](../../../waifu2x/srcnn.py) module.
 
-- [Waifu2x](../README.md#waifu2x-index) / [Modules](../README.md#waifu2x-modules) / [waifu2x](index.md#waifu2x) / srcnn
+- [Waifu2x](../README.md#waifu2x-index) / [Modules](../MODULES.md#waifu2x-modules) / [Waifu2x](index.md#waifu2x) / Srcnn
     - [ResBlock](#resblock)
     - [ResNet10](#resnet10)
     - [UpConv7](#upconv7)
@@ -11,7 +11,7 @@
 
 ## ResBlock
 
-[[find in source code]](../../waifu2x/srcnn.py#L62)
+[[find in source code]](../../../waifu2x/srcnn.py#L62)
 
 ```python
 class ResBlock(chainer.Chain):
@@ -26,7 +26,7 @@ class ResBlock(chainer.Chain):
 
 ## ResNet10
 
-[[find in source code]](../../waifu2x/srcnn.py#L98)
+[[find in source code]](../../../waifu2x/srcnn.py#L98)
 
 ```python
 class ResNet10(chainer.Chain):
@@ -35,7 +35,7 @@ class ResNet10(chainer.Chain):
 
 ## UpConv7
 
-[[find in source code]](../../waifu2x/srcnn.py#L35)
+[[find in source code]](../../../waifu2x/srcnn.py#L35)
 
 ```python
 class UpConv7(chainer.Chain):
@@ -44,7 +44,7 @@ class UpConv7(chainer.Chain):
 
 ## UpResNet10
 
-[[find in source code]](../../waifu2x/srcnn.py#L128)
+[[find in source code]](../../../waifu2x/srcnn.py#L128)
 
 ```python
 class UpResNet10(chainer.Chain):
@@ -53,7 +53,7 @@ class UpResNet10(chainer.Chain):
 
 ## VGG7
 
-[[find in source code]](../../waifu2x/srcnn.py#L8)
+[[find in source code]](../../../waifu2x/srcnn.py#L8)
 
 ```python
 class VGG7(chainer.Chain):
