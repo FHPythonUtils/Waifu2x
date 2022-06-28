@@ -17,6 +17,11 @@ from . import iproc, reconstruct, srcnn, utils
 THISDIR = str(Path(__file__).resolve().parent)
 
 
+
+def main():
+	run()
+
+
 def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Chain) -> Image.Image:
 	"""Remove noise from an image (src) using a scale model and an alpha model
 
@@ -158,7 +163,28 @@ def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]:
 	return models
 
 
-def main():  # pragma: no cover
+def run(
+	input_img_path="images/small.png",
+	output_img_path="./",
+	*,
+	gpu=-1,
+	quality=None,
+	model_dir=None,
+	scale_ratio=2.0,
+	# tta=False,  # Not sure how to add this.
+	batch_size=16,
+	block_size=128,
+	extension="png",
+	arch="VGG7",
+	method="scale",
+	noise_level=1,
+	color="rgb",
+	tta_level=8,
+	width=0,
+	height=0,
+	shorter_side=0,
+	longer_side=0,
+):  # pragma: no cover
 	"""Main entry point to the program
 
 	Raises:
@@ -166,26 +192,26 @@ def main():  # pragma: no cover
 	"""
 	# fmt:off
 	p = argparse.ArgumentParser(description="Chainer implementation of waifu2x")
-	p.add_argument("--gpu", "-g", type=int, default=-1, help="CUDA enabled GPU to use")
-	p.add_argument("--input", "-i", default="images/small.png", help="Input image/ directory")
-	p.add_argument("--output", "-o", default="./", help="Directory to write output images to")
-	p.add_argument("--quality", "-q", type=int, default=None, help="Set the quality of output images 1-100 (None=100)")
-	p.add_argument("--model_dir", "-d", default=None, help="Specify a custom directory containing models")
-	p.add_argument("--scale_ratio", "-s", type=float, default=2.0, help="Specify a scale")
+	p.add_argument("--gpu", "-g", type=int, default=gpu, help="CUDA enabled GPU to use")
+	p.add_argument("--input", "-i", default=input_img_path, help="Input image/ directory")
+	p.add_argument("--output", "-o", default=output_img_path, help="Directory to write output images to")
+	p.add_argument("--quality", "-q", type=int, default=quality, help="Set the quality of output images 1-100 (None=100)")
+	p.add_argument("--model_dir", "-d", default=model_dir, help="Specify a custom directory containing models")
+	p.add_argument("--scale_ratio", "-s", type=float, default=scale_ratio, help="Specify a scale")
 	p.add_argument("--tta", "-t", action="store_true")
-	p.add_argument("--batch_size", "-b", type=int, default=16)
-	p.add_argument("--block_size", "-l", type=int, default=128)
-	p.add_argument("--extension", "-e", default="png", choices=["png", "webp"], help="Select output extension png/webp")
-	p.add_argument("--arch", "-a", default="VGG7", choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
-	p.add_argument("--method", "-m", default="scale", choices=["noise", "scale", "noise_scale"])
-	p.add_argument("--noise_level", "-n", type=int, default=1, choices=[0, 1, 2, 3])
-	p.add_argument("--color", "-c", default="rgb", choices=["y", "rgb"])
-	p.add_argument("--tta_level", "-T", type=int, default=8, choices=[2, 4, 8])
+	p.add_argument("--batch_size", "-b", type=int, default=batch_size)
+	p.add_argument("--block_size", "-l", type=int, default=block_size)
+	p.add_argument("--extension", "-e", default=extension, choices=["png", "webp"], help="Select output extension png/webp")
+	p.add_argument("--arch", "-a", default=arch, choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
+	p.add_argument("--method", "-m", default=method, choices=["noise", "scale", "noise_scale"])
+	p.add_argument("--noise_level", "-n", type=int, default=noise_level, choices=[0, 1, 2, 3])
+	p.add_argument("--color", "-c", default=color, choices=["y", "rgb"])
+	p.add_argument("--tta_level", "-T", type=int, default=tta_level, choices=[2, 4, 8])
 	g = p.add_mutually_exclusive_group()
-	g.add_argument("--width", "-W", type=int, default=0)
-	g.add_argument("--height", "-H", type=int, default=0)
-	g.add_argument("--shorter_side", "-S", type=int, default=0)
-	g.add_argument("--longer_side", "-L", type=int, default=0)
+	g.add_argument("--width", "-W", type=int, default=width)
+	g.add_argument("--height", "-H", type=int, default=height)
+	g.add_argument("--shorter_side", "-S", type=int, default=shorter_side)
+	g.add_argument("--longer_side", "-L", type=int, default=longer_side)
 	# fmt:on
 
 	args = p.parse_args()
