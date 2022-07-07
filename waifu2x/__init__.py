@@ -17,7 +17,13 @@ from . import iproc, reconstruct, srcnn, utils
 THISDIR = str(Path(__file__).resolve().parent)
 
 
-def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Chain) -> Image.Image:
+
+def main():
+	"""Main entry point to the program."""
+	run()
+
+
+def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Chain, should_print: bool = True) -> Image.Image:
 	"""Remove noise from an image (src) using a scale model and an alpha model
 
 	Args:
@@ -28,15 +34,17 @@ def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Cha
 	Returns:
 		Image.Image: Pillow image with noise removed
 	"""
-	dst, alpha = split_alpha(src, model)
-	print(f"Level {args.noise_level} denoising...", end=" ", flush=True)
+	dst, alpha = split_alpha(src, model, should_print=should_print)
+	if should_print:
+		print(f"Level {args.noise_level} denoising...", end=" ", flush=True)
 	if args.tta:
 		dst = reconstruct.image_tta(dst, model, args.tta_level, args.block_size, args.batch_size)
 	else:
 		dst = reconstruct.image(dst, model, args.block_size, args.batch_size)
 	if model.inner_scale != 1:
 		dst = dst.resize((src.size[0], src.size[1]), Image.LANCZOS)
-	print("OK")
+	if should_print:
+		print("OK")
 	if alpha is not None:
 		dst.putalpha(alpha)
 	return dst
@@ -47,6 +55,7 @@ def upscale_image(
 	src: Image.Image,
 	scale_model: chainer.Chain,
 	alpha_model: chainer.Chain | None = None,
+	should_print: bool = True,
 ) -> Image.Image:
 	"""Upscale an image (src) using a scale model and an alpha model
 
@@ -59,9 +68,10 @@ def upscale_image(
 	Returns:
 		Image.Image: upscaled Pillow image
 	"""
-	dst, alpha = split_alpha(src, scale_model)
+	dst, alpha = split_alpha(src, scale_model, should_print=should_print)
 	for i in range(int(np.ceil(np.log2(args.scale_ratio)))):
-		print("2.0x scaling...", end=" ", flush=True)
+		if should_print:
+			print("2.0x scaling...", end=" ", flush=True)
 		model = scale_model if i == 0 or alpha_model is None else alpha_model
 		if model.inner_scale == 1:
 			dst = iproc.nn_scaling(dst, 2)  # Nearest neighbor 2x scaling
@@ -76,13 +86,16 @@ def upscale_image(
 			alpha = reconstruct.image(alpha, scale_model, args.block_size, args.batch_size)
 		else:
 			alpha = reconstruct.image(alpha, alpha_model, args.block_size, args.batch_size)
-		print("OK")
+		if should_print:
+			print("OK")
 	dst_w = int(np.round(src.size[0] * args.scale_ratio))
 	dst_h = int(np.round(src.size[1] * args.scale_ratio))
 	if dst_w != dst.size[0] or dst_h != dst.size[1]:
-		print("Resizing...", end=" ", flush=True)
+		if should_print:
+			print("Resizing...", end=" ", flush=True)
 		dst = dst.resize((dst_w, dst_h), Image.LANCZOS)
-		print("OK")
+		if should_print:
+			print("OK")
 	if alpha is not None:
 		if alpha.size[0] != dst_w or alpha.size[1] != dst_h:
 			alpha = alpha.resize((dst_w, dst_h), Image.LANCZOS)
@@ -90,20 +103,23 @@ def upscale_image(
 	return dst
 
 
-def split_alpha(src: Image.Image, model: chainer.Chain) -> tuple[Image.Image, Image.Image | None]:
+def split_alpha(src: Image.Image, model: chainer.Chain, should_print: bool = True) -> tuple[Image.Image, Image.Image | None]:
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
 		srcRGBA = src.convert("RGBA")
 		alphas = [x[1][-1] for x in srcRGBA.getcolors(src.size[0] * src.size[1])]
 		if any(x < 255 for x in alphas):
-			print(f"Alpha channel detected in image with mode={src.mode}")
+			if should_print:
+				print(f"Alpha channel detected in image with mode={src.mode}")
 			alpha = srcRGBA.split()[-1]
 	rgb = src.convert("RGB")
 	if src.mode in ("LA", "RGBA"):
-		print("Splitting alpha channel...", end=" ", flush=True)
+		if should_print:
+			print("Splitting alpha channel...", end=" ", flush=True)
 		alpha = src.split()[-1]
 		rgb = iproc.alpha_make_border(rgb, alpha, model)
-		print("OK")
+		if should_print:
+			print("OK")
 	return rgb, alpha
 
 
@@ -158,34 +174,56 @@ def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]:
 	return models
 
 
-def main():  # pragma: no cover
-	"""Main entry point to the program
+def run(
+	input_img_path: str = "images/small.png",
+	output_img_path: str = "./",
+	*,
+	gpu: int = -1,
+	quality: int | None = None,
+	model_dir: str = None,
+	scale_ratio: float = 2.0,
+	# tta=False,  # Not sure how to add this.
+	batch_size: int = 16,
+	block_size: int = 128,
+	extension: str = "png",
+	arch: str = "VGG7",
+	method: str = "scale",
+	noise_level: int = 1,
+	color: str = "rgb",
+	tta_level: int = 8,
+	width: int = 0,
+	height: int = 0,
+	shorter_side: int = 0,
+	longer_side: int = 0,
+	should_print: int = True,
+):  # pragma: no cover
+	"""Runs waifu2x. Mostly the same inputs as CLI ones.
 
 	Raises:
 		ValueError: Output file extension not supported
 	"""
 	# fmt:off
 	p = argparse.ArgumentParser(description="Chainer implementation of waifu2x")
-	p.add_argument("--gpu", "-g", type=int, default=-1, help="CUDA enabled GPU to use")
-	p.add_argument("--input", "-i", default="images/small.png", help="Input image/ directory")
-	p.add_argument("--output", "-o", default="./", help="Directory to write output images to")
-	p.add_argument("--quality", "-q", type=int, default=None, help="Set the quality of output images 1-100 (None=100)")
-	p.add_argument("--model_dir", "-d", default=None, help="Specify a custom directory containing models")
-	p.add_argument("--scale_ratio", "-s", type=float, default=2.0, help="Specify a scale")
+	p.add_argument("--gpu", "-g", type=int, default=gpu, help="CUDA enabled GPU to use")
+	p.add_argument("--input", "-i", default=input_img_path, help="Input image/ directory")
+	p.add_argument("--output", "-o", default=output_img_path, help="Directory to write output images to")
+	p.add_argument("--quality", "-q", type=int, default=quality, help="Set the quality of output images 1-100 (None=100)")
+	p.add_argument("--model_dir", "-d", default=model_dir, help="Specify a custom directory containing models")
+	p.add_argument("--scale_ratio", "-s", type=float, default=scale_ratio, help="Specify a scale")
 	p.add_argument("--tta", "-t", action="store_true")
-	p.add_argument("--batch_size", "-b", type=int, default=16)
-	p.add_argument("--block_size", "-l", type=int, default=128)
-	p.add_argument("--extension", "-e", default="png", choices=["png", "webp"], help="Select output extension png/webp")
-	p.add_argument("--arch", "-a", default="VGG7", choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
-	p.add_argument("--method", "-m", default="scale", choices=["noise", "scale", "noise_scale"])
-	p.add_argument("--noise_level", "-n", type=int, default=1, choices=[0, 1, 2, 3])
-	p.add_argument("--color", "-c", default="rgb", choices=["y", "rgb"])
-	p.add_argument("--tta_level", "-T", type=int, default=8, choices=[2, 4, 8])
+	p.add_argument("--batch_size", "-b", type=int, default=batch_size)
+	p.add_argument("--block_size", "-l", type=int, default=block_size)
+	p.add_argument("--extension", "-e", default=extension, choices=["png", "webp"], help="Select output extension png/webp")
+	p.add_argument("--arch", "-a", default=arch, choices=["VGG7", "0", "UpConv7", "1", "ResNet10", "2", "UpResNet10", "3"])
+	p.add_argument("--method", "-m", default=method, choices=["noise", "scale", "noise_scale"])
+	p.add_argument("--noise_level", "-n", type=int, default=noise_level, choices=[0, 1, 2, 3])
+	p.add_argument("--color", "-c", default=color, choices=["y", "rgb"])
+	p.add_argument("--tta_level", "-T", type=int, default=tta_level, choices=[2, 4, 8])
 	g = p.add_mutually_exclusive_group()
-	g.add_argument("--width", "-W", type=int, default=0)
-	g.add_argument("--height", "-H", type=int, default=0)
-	g.add_argument("--shorter_side", "-S", type=int, default=0)
-	g.add_argument("--longer_side", "-L", type=int, default=0)
+	g.add_argument("--width", "-W", type=int, default=width)
+	g.add_argument("--height", "-H", type=int, default=height)
+	g.add_argument("--shorter_side", "-S", type=int, default=shorter_side)
+	g.add_argument("--longer_side", "-L", type=int, default=longer_side)
 	# fmt:on
 
 	args = p.parse_args()
@@ -247,15 +285,16 @@ def main():  # pragma: no cover
 			outname += f"_(tta{args.tta_level})" if args.tta else "_"
 			if "noise_scale" in models:
 				outname += f"(noise{args.noise_level}_scale{args.scale_ratio:.1f}x)"
-				dst = upscale_image(args, dst, models["noise_scale"], models["alpha"])
+				dst = upscale_image(args, dst, models["noise_scale"], models["alpha"], should_print=should_print)
 			else:
 				if "noise" in models:
 					outname += f"(noise{args.noise_level})"
-					dst = denoise_image(args, dst, models["noise"])
+					dst = denoise_image(args, dst, models["noise"], should_print=should_print)
 				if "scale" in models:
 					outname += f"(scale{args.scale_ratio:.1f}x)"
-					dst = upscale_image(args, dst, models["scale"])
-			print(f"Elapsed time: {time.time() - start:.6f} sec")
+					dst = upscale_image(args, dst, models["scale"], should_print=should_print)
+			if should_print:
+				print(f"Elapsed time: {time.time() - start:.6f} sec")
 
 			outname += f"({args.arch}_{args.color}){outext}"
 			if os.path.exists(outpath):
@@ -268,7 +307,8 @@ def main():  # pragma: no cover
 			dst.convert(src.mode).save(
 				outpath, quality=quality, lossless=lossless, icc_profile=icc_profile
 			)
-			print(f"Saved as '{outpath}'")
+			if should_print:
+				print(f"Saved as '{outpath}'")
 
 
 if __name__ == "__main__":  # pragma: no cover
