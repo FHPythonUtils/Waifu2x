@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2022.1"
+version = "2022.2"
 license = "mit"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
@@ -73,7 +73,6 @@ enable = ["F", "E", "W", "R", "C"]
 disable = [
 	"pointless-string-statement",
 	"superfluous-parens",
-	"bad-continuation",
 	# Need to be removed eventually
 	"missing-function-docstring",
 	"missing-module-docstring",

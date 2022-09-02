@@ -1,61 +1,79 @@
 # ClippedWeightedHuberLoss
 
+[Waifu2x Index](../../README.md#waifu2x-index) /
+[Waifu2x](../index.md#waifu2x) /
+[Loss](./index.md#loss) /
+ClippedWeightedHuberLoss
+
 > Auto-generated documentation for [waifu2x.loss.clipped_weighted_huber_loss](../../../../waifu2x/loss/clipped_weighted_huber_loss.py) module.
 
-- [Waifu2x](../../README.md#waifu2x-index) / [Modules](../../MODULES.md#waifu2x-modules) / [Waifu2x](../index.md#waifu2x) / [Loss](index.md#loss) / ClippedWeightedHuberLoss
-    - [ClippedWeightedHuberLoss](#clippedweightedhuberloss)
-        - [ClippedWeightedHuberLoss().backward](#clippedweightedhuberlossbackward)
-        - [ClippedWeightedHuberLoss().check_type_forward](#clippedweightedhuberlosscheck_type_forward)
-        - [ClippedWeightedHuberLoss().forward](#clippedweightedhuberlossforward)
-    - [clipped_weighted_huber_loss](#clipped_weighted_huber_loss)
+- [ClippedWeightedHuberLoss](#clippedweightedhuberloss)
+  - [ClippedWeightedHuberLoss](#clippedweightedhuberloss-1)
+    - [ClippedWeightedHuberLoss().backward](#clippedweightedhuberloss()backward)
+    - [ClippedWeightedHuberLoss().check_type_forward](#clippedweightedhuberloss()check_type_forward)
+    - [ClippedWeightedHuberLoss().forward](#clippedweightedhuberloss()forward)
+  - [clipped_weighted_huber_loss](#clipped_weighted_huber_loss)
 
 ## ClippedWeightedHuberLoss
 
-[[find in source code]](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L8)
+[Show source in clipped_weighted_huber_loss.py:8](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L8)
+
+#### Signature
 
 ```python
 class ClippedWeightedHuberLoss(function.Function):
     def __init__(
-        weight,
-        delta: float = 0.1,
-        clip: tuple[float, float] = (0.0, 1.0),
+        self, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
     ):
+        ...
 ```
 
 ### ClippedWeightedHuberLoss().backward
 
-[[find in source code]](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L40)
+[Show source in clipped_weighted_huber_loss.py:40](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L40)
+
+#### Signature
 
 ```python
-def backward(inputs, grad_outputs):
+def backward(self, inputs, grad_outputs):
+    ...
 ```
 
 ### ClippedWeightedHuberLoss().check_type_forward
 
-[[find in source code]](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L15)
+[Show source in clipped_weighted_huber_loss.py:15](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L15)
+
+#### Signature
 
 ```python
-def check_type_forward(in_types):
+def check_type_forward(self, in_types):
+    ...
 ```
 
 ### ClippedWeightedHuberLoss().forward
 
-[[find in source code]](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L24)
+[Show source in clipped_weighted_huber_loss.py:24](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L24)
+
+#### Signature
 
 ```python
-def forward(inputs):
+def forward(self, inputs):
+    ...
 ```
+
+
 
 ## clipped_weighted_huber_loss
 
-[[find in source code]](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L49)
+[Show source in clipped_weighted_huber_loss.py:49](../../../../waifu2x/loss/clipped_weighted_huber_loss.py#L49)
+
+#### Signature
 
 ```python
 def clipped_weighted_huber_loss(
-    x,
-    t,
-    weight,
-    delta: float = 0.1,
-    clip: tuple[float, float] = (0.0, 1.0),
+    x, t, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
 ):
+    ...
 ```
+
+

@@ -17,13 +17,14 @@ from . import iproc, reconstruct, srcnn, utils
 THISDIR = str(Path(__file__).resolve().parent)
 
 
-
 def main():
 	"""Main entry point to the program."""
 	run()
 
 
-def denoise_image(args: argparse.Namespace, src: Image.Image, model: chainer.Chain, should_print: bool = True) -> Image.Image:
+def denoise_image(
+	args: argparse.Namespace, src: Image.Image, model: chainer.Chain, should_print: bool = True
+) -> Image.Image:
 	"""Remove noise from an image (src) using a scale model and an alpha model
 
 	Args:
@@ -103,7 +104,9 @@ def upscale_image(
 	return dst
 
 
-def split_alpha(src: Image.Image, model: chainer.Chain, should_print: bool = True) -> tuple[Image.Image, Image.Image | None]:
+def split_alpha(
+	src: Image.Image, model: chainer.Chain, should_print: bool = True
+) -> tuple[Image.Image, Image.Image | None]:
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
 		srcRGBA = src.convert("RGBA")
@@ -285,7 +288,9 @@ def run(
 			outname += f"_(tta{args.tta_level})" if args.tta else "_"
 			if "noise_scale" in models:
 				outname += f"(noise{args.noise_level}_scale{args.scale_ratio:.1f}x)"
-				dst = upscale_image(args, dst, models["noise_scale"], models["alpha"], should_print=should_print)
+				dst = upscale_image(
+					args, dst, models["noise_scale"], models["alpha"], should_print=should_print
+				)
 			else:
 				if "noise" in models:
 					outname += f"(noise{args.noise_level})"

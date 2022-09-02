@@ -3,6 +3,18 @@
 All major and minor version changes will be documented in this file. Details of
 patch-level version changes can be found in [commit messages](../../commits/master).
 
+## 2022.2 - 2022/09/02
+
+Improvements per https://github.com/FHPythonUtils/Waifu2x/pull/4, thanks
+https://github.com/ArielMAJ for the improvements and the changelog :)
+
+- Old `main` function is now called `run` and receives all the same arguments as expected from CLI with the same default values.
+	- This means the user can now import `waifu2x` and just run `waifu2x.run(input_img_path="./input.png", output_img_path="./output.png")` to upscale images from a script.
+	- This also means everything works the same (main function calls `run()` with default args).
+- Added extra argument to `run` and a few other functions in `__init__.py` as to stop prints from happening (as they might not be wanted when importing this module.
+
+Fix Pillow deprecations https://pillow.readthedocs.io/en/stable/deprecations.html#constants
+
 ## 2022.1 - 2022/04/12
 
 - Improve tests

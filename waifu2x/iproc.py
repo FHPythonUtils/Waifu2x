@@ -84,7 +84,7 @@ def nn_scaling(src: Image.Image | np.ndarray | None, ratio: int) -> Image.Image 
 
 	if isinstance(src, Image.Image):
 		w, h = src.size[:2]
-		dst = src.resize((int(w * ratio), int(h * ratio)), Image.NEAREST)
+		dst = src.resize((int(w * ratio), int(h * ratio)), Image.Resampling.NEAREST)
 	elif isinstance(src, np.ndarray):
 		with array_to_wand(src) as tmp:
 			h, w = src.shape[:2]

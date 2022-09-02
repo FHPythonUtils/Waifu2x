@@ -69,16 +69,16 @@ def inv(rot: int, flip: bool = False):
 
 
 def get_tta_patterns(src: np.ndarray, n: int):
-	src_lr = src.transpose(Image.FLIP_LEFT_RIGHT)
+	src_lr = src.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
 	patterns = [
 		[src, None],
-		[src.transpose(Image.ROTATE_90), inv(-90)],
-		[src.transpose(Image.ROTATE_180), inv(-180)],
-		[src.transpose(Image.ROTATE_270), inv(-270)],
+		[src.transpose(Image.Transpose.ROTATE_90), inv(-90)],
+		[src.transpose(Image.Transpose.ROTATE_180), inv(-180)],
+		[src.transpose(Image.Transpose.ROTATE_270), inv(-270)],
 		[src_lr, inv(0, True)],
-		[src_lr.transpose(Image.ROTATE_90), inv(-90, True)],
-		[src_lr.transpose(Image.ROTATE_180), inv(-180, True)],
-		[src_lr.transpose(Image.ROTATE_270), inv(-270, True)],
+		[src_lr.transpose(Image.Transpose.ROTATE_90), inv(-90, True)],
+		[src_lr.transpose(Image.Transpose.ROTATE_180), inv(-180, True)],
+		[src_lr.transpose(Image.Transpose.ROTATE_270), inv(-270, True)],
 	]
 	if n == 2:
 		return [patterns[0], patterns[4]]

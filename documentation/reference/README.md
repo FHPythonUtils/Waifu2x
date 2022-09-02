@@ -1,10 +1,9 @@
-# Waifu2x Modules
+# Waifu2x Index
 
-> Auto-generated documentation modules index.
+> Auto-generated documentation index.
 
-Full list of [Waifu2x](README.md#waifu2x-index) project modules.
+A full list of `Waifu2x` project modules.
 
-- [Waifu2x Index](README.md#waifu2x-index)
 - [Waifu2x](waifu2x/index.md#waifu2x)
     - [Module](waifu2x/module.md#module)
     - [Data Augmentation](waifu2x/data_augmentation.md#data-augmentation)
