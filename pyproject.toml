@@ -15,7 +15,7 @@ classifiers = [
 	"Operating System :: OS Independent",
 	"Programming Language :: Python :: Implementation :: CPython",
 	"Topic :: Software Development :: Libraries :: Python Modules",
-	"Topic :: Utilities"
+	"Topic :: Utilities",
 ]
 homepage = "https://github.com/FHPythonUtils/waifu2x"
 repository = "https://github.com/FHPythonUtils/waifu2x"
@@ -41,7 +41,7 @@ coverage = "^6.3.2"
 
 [tool.black]
 line-length = 100
-target-version = ["py37"]
+target-version = ["py38"]
 
 [tool.isort]
 profile = "black"
@@ -66,7 +66,7 @@ argument-rgx = "(([a-z0-9]*_?[a-z0-9]*)*)"
 indent-string = "\t"
 
 [tool.pylint.master]
-ignore-patterns = "test_.*?py"
+ignore-paths = ["tests"]
 
 [tool.pylint.messages_control]
 enable = ["F", "E", "W", "R", "C"]
