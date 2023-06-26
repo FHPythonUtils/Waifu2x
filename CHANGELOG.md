@@ -3,6 +3,12 @@
 All major and minor version changes will be documented in this file. Details of
 patch-level version changes can be found in [commit messages](../../commits/master).
 
+## 2023 - 2023/06/26
+
+- Improved the tutorial docs
+- Bugfixes to `run` function
+- Test `run` function
+
 ## 2022.2 - 2022/09/02
 
 Improvements per https://github.com/FHPythonUtils/Waifu2x/pull/4, thanks

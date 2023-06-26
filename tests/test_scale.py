@@ -8,7 +8,7 @@ from PIL import Image
 THISDIR = str(Path(__file__).resolve().parent)
 sys.path.insert(0, str(Path(THISDIR).parent))
 
-from waifu2x import load_models, upscale_image
+from waifu2x import load_models, run, upscale_image
 
 args = Namespace(
 	color="rgb",
@@ -73,6 +73,32 @@ def test_foreground_jpg():
 	assert imgcompare.is_equal(
 		dst,
 		f"{THISDIR}/data/foreground_expected.jpg.png",
+		tolerance=0.2,
+	)
+
+
+def test_run_background_png():
+	"""test_run_background_png"""
+	input_img_path = f"{THISDIR}/data/background.png"
+	output_img_path = f"{THISDIR}/data/background_actual.png"
+	expected = f"{THISDIR}/data/background_expected.png"
+	run(input_img_path, output_img_path)
+	assert imgcompare.is_equal(
+		output_img_path,
+		expected,
+		tolerance=0.2,
+	)
+
+
+def test_run_foreground_png():
+	"""test_run_foreground_png"""
+	input_img_path = f"{THISDIR}/data/foreground.png"
+	output_img_path = f"{THISDIR}/data/foreground_actual.png"
+	expected = f"{THISDIR}/data/foreground_expected.png"
+	run(input_img_path, output_img_path)
+	assert imgcompare.is_equal(
+		output_img_path,
+		expected,
 		tolerance=0.2,
 	)
 

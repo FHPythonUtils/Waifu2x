@@ -88,9 +88,31 @@ def main():
 
 Runs waifu2x. Mostly the same inputs as CLI ones.
 
+#### Arguments
+
+- `input_img_path` *str* - Input image/ directory, defaults to "images/small.png"
+- `output_img_path` *str* - Directory to write output images to, defaults to "./"
+- `gpu` *int* - CUDA enabled GPU to use, defaults to -1
+:param int | None quality: Set the quality of output images 1-100 (None=100), defaults to None
+:param str | None model_dir: Specify a custom directory containing models, defaults to None
+- `scale_ratio` *float* - Specify a scale, defaults to 2.0
+- `batch_size` *int* - _description_, defaults to 16
+- `block_size` *int* - _description_, defaults to 128
+- `extension` *str* - Select output extension png/webp
+- `arch` *str* - _description_, defaults to "VGG7"
+- `method` *str* - _description_, defaults to "scale"
+- `noise_level` *int* - _description_, defaults to 1
+- `color` *str* - _description_, defaults to "rgb"
+- `tta_level` *int* - _description_, defaults to 8
+- `width` *int* - _description_, defaults to 0
+- `height` *int* - _description_, defaults to 0
+- `shorter_side` *int* - _description_, defaults to 0
+- `longer_side` *int* - _description_, defaults to 0
+- `should_print` *bool* - _description_, defaults to True
+
 #### Raises
 
-- `ValueError` - Output file extension not supported
+- `ValueError` -  Output file extension not supported
 
 #### Signature
 
@@ -100,7 +122,7 @@ def run(
     output_img_path: str = "./",
     gpu: int = -1,
     quality: int | None = None,
-    model_dir: str = None,
+    model_dir: str | None = None,
     scale_ratio: float = 2.0,
     batch_size: int = 16,
     block_size: int = 128,
@@ -114,7 +136,7 @@ def run(
     height: int = 0,
     shorter_side: int = 0,
     longer_side: int = 0,
-    should_print: int = True,
+    should_print: bool = True,
 ):
     ...
 ```

@@ -183,7 +183,7 @@ def run(
 	*,
 	gpu: int = -1,
 	quality: int | None = None,
-	model_dir: str = None,
+	model_dir: str | None = None,
 	scale_ratio: float = 2.0,
 	# tta=False,  # Not sure how to add this.
 	batch_size: int = 16,
@@ -198,12 +198,30 @@ def run(
 	height: int = 0,
 	shorter_side: int = 0,
 	longer_side: int = 0,
-	should_print: int = True,
+	should_print: bool = True,
 ):  # pragma: no cover
 	"""Runs waifu2x. Mostly the same inputs as CLI ones.
 
-	Raises:
-		ValueError: Output file extension not supported
+	:param str input_img_path: Input image/ directory, defaults to "images/small.png"
+	:param str output_img_path: Directory to write output images to, defaults to "./"
+	:param int gpu: CUDA enabled GPU to use, defaults to -1
+	:param int | None quality: Set the quality of output images 1-100 (None=100), defaults to None
+	:param str | None model_dir: Specify a custom directory containing models, defaults to None
+	:param float scale_ratio: Specify a scale, defaults to 2.0
+	:param int batch_size: _description_, defaults to 16
+	:param int block_size: _description_, defaults to 128
+	:param str extension: Select output extension png/webp
+	:param str arch: _description_, defaults to "VGG7"
+	:param str method: _description_, defaults to "scale"
+	:param int noise_level: _description_, defaults to 1
+	:param str color: _description_, defaults to "rgb"
+	:param int tta_level: _description_, defaults to 8
+	:param int width: _description_, defaults to 0
+	:param int height: _description_, defaults to 0
+	:param int shorter_side: _description_, defaults to 0
+	:param int longer_side: _description_, defaults to 0
+	:param bool should_print: _description_, defaults to True
+	:raises ValueError: Output file extension not supported
 	"""
 	# fmt:off
 	p = argparse.ArgumentParser(description="Chainer implementation of waifu2x")
@@ -237,36 +255,39 @@ def run(
 
 	input_exts = [".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".webp"]
 	output_exts = [".png", ".webp"]
-	outext = "." + args.extension
 
-	outname = None
-	outdir = args.output
-	if os.path.isdir(args.input):
+	# Get filelist
+	inputpath = Path(args.input)
+	if inputpath.is_dir():
 		filelist = utils.load_filelist(args.input)
 	else:
-		tmpname, tmpext = os.path.splitext(os.path.basename(args.output))
-		if tmpext in output_exts:
-			outext = tmpext
-			outname = tmpname
-			outdir = os.path.dirname(args.output)
-			outdir = "./" if outdir == "" else outdir
-		elif tmpext != "":
-			raise ValueError(f"Format {tmpext} is not supported")
+		if inputpath.suffix not in input_exts:
+			raise ValueError("Input suffix is not supported!")
 		filelist = [args.input]
 
-	if not os.path.exists(outdir):
-		os.makedirs(outdir)
+	# Output dir/ file
+	outsuffix = f".{extension}"
+	outputpath = Path(args.output)
+	if outputpath.is_dir():
+		outdir = args.output
+	else:
+		outdir = outputpath.parent.as_posix()
+		outsuffix = outputpath.suffix
 
-	for path in filelist:
-		if not Path(path).exists():
+	outfile = None
+	if len(filelist) == 1 and not outputpath.is_dir():
+		outfile = Path(args.output).name
+
+	for infile in filelist:
+		# File Exists?
+		inpath = Path(infile)
+		inbasename, insuffix = os.path.splitext(inpath.name)
+		if not inpath.exists():
 			p.print_help()
 			sys.exit(1)
-		tmpname, tmpext = os.path.splitext(os.path.basename(path))
-		if outname is None or len(filelist) > 1:
-			outname = tmpname
-		outpath = os.path.join(outdir, f"{outname}{outext}")
-		if tmpext.lower() in input_exts:
-			src = Image.open(path)
+
+		if insuffix in input_exts:
+			src = Image.open(infile)
 			w, h = src.size[:2]
 			if args.width != 0:
 				args.scale_ratio = args.width / w
@@ -285,6 +306,8 @@ def run(
 
 			dst = src.copy()
 			start = time.time()
+
+			outname = inbasename
 			outname += f"_(tta{args.tta_level})" if args.tta else "_"
 			if "noise_scale" in models:
 				outname += f"(noise{args.noise_level}_scale{args.scale_ratio:.1f}x)"
@@ -301,9 +324,15 @@ def run(
 			if should_print:
 				print(f"Elapsed time: {time.time() - start:.6f} sec")
 
-			outname += f"({args.arch}_{args.color}){outext}"
-			if os.path.exists(outpath):
-				outpath = os.path.join(outdir, outname)
+			if outsuffix not in output_exts:
+				raise ValueError("Output suffix is not supported!")
+
+			outname += f"({args.arch}_{args.color}){outsuffix}"
+
+			if outfile is not None:
+				outname = outfile
+
+			outpath = os.path.join(outdir, outname)
 
 			lossless = args.quality is None
 			quality = 100 if lossless else args.quality

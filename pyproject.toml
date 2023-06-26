@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2022.2"
+version = "2023"
 license = "mit"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
