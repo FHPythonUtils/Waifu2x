@@ -21,8 +21,7 @@ Utils
 
 ```python
 class Namespace:
-    def __init__(self, kwargs):
-        ...
+    def __init__(self, kwargs): ...
 ```
 
 ### Namespace().append
@@ -32,8 +31,7 @@ class Namespace:
 #### Signature
 
 ```python
-def append(self, key, value):
-    ...
+def append(self, key, value): ...
 ```
 
 
@@ -45,8 +43,7 @@ def append(self, key, value):
 #### Signature
 
 ```python
-def get_config(base, model, train: bool = True):
-    ...
+def get_config(base, model, train: bool = True): ...
 ```
 
 
@@ -58,8 +55,7 @@ def get_config(base, model, train: bool = True):
 #### Signature
 
 ```python
-def load_filelist(directory: str, shuffle: bool = False):
-    ...
+def load_filelist(directory: str, shuffle: bool = False): ...
 ```
 
 
@@ -71,8 +67,5 @@ def load_filelist(directory: str, shuffle: bool = False):
 #### Signature
 
 ```python
-def set_random_seed(seed, gpu: int = -1):
-    ...
+def set_random_seed(seed, gpu: int = -1): ...
 ```
-
-

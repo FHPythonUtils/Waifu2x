@@ -38,8 +38,7 @@ def denoise_image(
     src: Image.Image,
     model: chainer.Chain,
     should_print: bool = True,
-) -> Image.Image:
-    ...
+) -> Image.Image: ...
 ```
 
 
@@ -61,8 +60,7 @@ Load models using a args config
 #### Signature
 
 ```python
-def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]:
-    ...
+def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]: ...
 ```
 
 
@@ -76,8 +74,7 @@ Main entry point to the program.
 #### Signature
 
 ```python
-def main():
-    ...
+def main(): ...
 ```
 
 
@@ -137,8 +134,7 @@ def run(
     shorter_side: int = 0,
     longer_side: int = 0,
     should_print: bool = True,
-):
-    ...
+): ...
 ```
 
 
@@ -152,8 +148,7 @@ def run(
 ```python
 def split_alpha(
     src: Image.Image, model: chainer.Chain, should_print: bool = True
-) -> tuple[Image.Image, Image.Image | None]:
-    ...
+) -> tuple[Image.Image, Image.Image | None]: ...
 ```
 
 
@@ -184,8 +179,7 @@ def upscale_image(
     scale_model: chainer.Chain,
     alpha_model: chainer.Chain | None = None,
     should_print: bool = True,
-) -> Image.Image:
-    ...
+) -> Image.Image: ...
 ```
 
 

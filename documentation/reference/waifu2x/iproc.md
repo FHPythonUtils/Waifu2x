@@ -23,8 +23,9 @@ Iproc
 #### Signature
 
 ```python
-def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.Chain):
-    ...
+def alpha_make_border(
+    rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.Chain
+): ...
 ```
 
 
@@ -36,8 +37,7 @@ def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.
 #### Signature
 
 ```python
-def array_to_wand(src: np.ndarray):
-    ...
+def array_to_wand(src: np.ndarray): ...
 ```
 
 
@@ -49,8 +49,7 @@ def array_to_wand(src: np.ndarray):
 #### Signature
 
 ```python
-def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0):
-    ...
+def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0): ...
 ```
 
 
@@ -62,8 +61,7 @@ def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0):
 #### Signature
 
 ```python
-def jpeg(src, sampling_factor: str = "1x1,1x1,1x1", quality: int = 90):
-    ...
+def jpeg(src, sampling_factor: str = "1x1,1x1,1x1", quality: int = 90): ...
 ```
 
 
@@ -77,8 +75,7 @@ def jpeg(src, sampling_factor: str = "1x1,1x1,1x1", quality: int = 90):
 ```python
 def nn_scaling(
     src: Image.Image | np.ndarray | None, ratio: int
-) -> Image.Image | np.ndarray | None:
-    ...
+) -> Image.Image | np.ndarray | None: ...
 ```
 
 
@@ -90,8 +87,7 @@ def nn_scaling(
 #### Signature
 
 ```python
-def pcacov(x: np.ndarray):
-    ...
+def pcacov(x: np.ndarray): ...
 ```
 
 
@@ -103,8 +99,7 @@ def pcacov(x: np.ndarray):
 #### Signature
 
 ```python
-def read_image_rgb_uint8(path: str):
-    ...
+def read_image_rgb_uint8(path: str): ...
 ```
 
 
@@ -116,8 +111,5 @@ def read_image_rgb_uint8(path: str):
 #### Signature
 
 ```python
-def wand_to_array(src: wand.image.Image):
-    ...
+def wand_to_array(src: wand.image.Image): ...
 ```
-
-

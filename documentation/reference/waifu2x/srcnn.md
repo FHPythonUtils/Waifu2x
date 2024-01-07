@@ -28,8 +28,7 @@ class ResBlock(chainer.Chain):
         slope: float = 0.1,
         r: int = 16,
         se: bool = False,
-    ):
-        ...
+    ): ...
 ```
 
 
@@ -42,8 +41,7 @@ class ResBlock(chainer.Chain):
 
 ```python
 class ResNet10(chainer.Chain):
-    def __init__(self, ch):
-        ...
+    def __init__(self, ch): ...
 ```
 
 
@@ -56,8 +54,7 @@ class ResNet10(chainer.Chain):
 
 ```python
 class UpConv7(chainer.Chain):
-    def __init__(self, ch: int):
-        ...
+    def __init__(self, ch: int): ...
 ```
 
 
@@ -70,8 +67,7 @@ class UpConv7(chainer.Chain):
 
 ```python
 class UpResNet10(chainer.Chain):
-    def __init__(self, ch):
-        ...
+    def __init__(self, ch): ...
 ```
 
 
@@ -84,8 +80,5 @@ class UpResNet10(chainer.Chain):
 
 ```python
 class VGG7(chainer.Chain):
-    def __init__(self, ch):
-        ...
+    def __init__(self, ch): ...
 ```
-
-

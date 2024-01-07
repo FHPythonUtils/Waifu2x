@@ -5,5 +5,4 @@
 Module
 
 > Auto-generated documentation for [waifu2x.__main__](../../../waifu2x/__main__.py) module.
-
 - [Module](#module)

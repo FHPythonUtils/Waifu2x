@@ -22,8 +22,7 @@ Pairwise Transform
 #### Signature
 
 ```python
-def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int):
-    ...
+def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int): ...
 ```
 
 
@@ -35,8 +34,7 @@ def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int):
 #### Signature
 
 ```python
-def crop_if_large(src: np.ndarray, max_size: int):
-    ...
+def crop_if_large(src: np.ndarray, max_size: int): ...
 ```
 
 
@@ -48,8 +46,7 @@ def crop_if_large(src: np.ndarray, max_size: int):
 #### Signature
 
 ```python
-def noise(src: np.ndarray, p: np.ndarray, p_chroma, level: int):
-    ...
+def noise(src: np.ndarray, p: np.ndarray, p_chroma, level: int): ...
 ```
 
 
@@ -70,8 +67,7 @@ def noise_scale(
     p: np.ndarray,
     p_chroma,
     level: int,
-):
-    ...
+): ...
 ```
 
 
@@ -83,8 +79,7 @@ def noise_scale(
 #### Signature
 
 ```python
-def pairwise_transform(src: np.ndarray, args: argparse.Namespace):
-    ...
+def pairwise_transform(src: np.ndarray, args: argparse.Namespace): ...
 ```
 
 
@@ -96,8 +91,7 @@ def pairwise_transform(src: np.ndarray, args: argparse.Namespace):
 #### Signature
 
 ```python
-def preprocess(src: np.ndarray, args: argparse.Namespace):
-    ...
+def preprocess(src: np.ndarray, args: argparse.Namespace): ...
 ```
 
 
@@ -109,8 +103,5 @@ def preprocess(src: np.ndarray, args: argparse.Namespace):
 #### Signature
 
 ```python
-def scale(src: np.ndarray, filters, bmin, bmax, scale_):
-    ...
+def scale(src: np.ndarray, filters, bmin, bmax, scale_): ...
 ```
-
-

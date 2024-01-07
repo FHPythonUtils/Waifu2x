@@ -20,8 +20,7 @@ Data Augmentation
 #### Signature
 
 ```python
-def color_noise(src: np.ndarray, p, factor: float = 0.1) -> np.ndarray:
-    ...
+def color_noise(src: np.ndarray, p, factor: float = 0.1) -> np.ndarray: ...
 ```
 
 
@@ -33,8 +32,7 @@ def color_noise(src: np.ndarray, p, factor: float = 0.1) -> np.ndarray:
 #### Signature
 
 ```python
-def flip(src: np.ndarray) -> np.ndarray:
-    ...
+def flip(src: np.ndarray) -> np.ndarray: ...
 ```
 
 
@@ -46,8 +44,7 @@ def flip(src: np.ndarray) -> np.ndarray:
 #### Signature
 
 ```python
-def half(src: np.ndarray, p: np.ndarray) -> np.ndarray:
-    ...
+def half(src: np.ndarray, p: np.ndarray) -> np.ndarray: ...
 ```
 
 
@@ -59,8 +56,7 @@ def half(src: np.ndarray, p: np.ndarray) -> np.ndarray:
 #### Signature
 
 ```python
-def shift_1px(src: np.ndarray) -> np.ndarray:
-    ...
+def shift_1px(src: np.ndarray) -> np.ndarray: ...
 ```
 
 
@@ -72,8 +68,5 @@ def shift_1px(src: np.ndarray) -> np.ndarray:
 #### Signature
 
 ```python
-def unsharp_mask(src: np.ndarray, p) -> np.ndarray:
-    ...
+def unsharp_mask(src: np.ndarray, p) -> np.ndarray: ...
 ```
-
-

@@ -21,8 +21,7 @@ DatasetSampler
 
 ```python
 class DatasetSampler:
-    def __init__(self, filelist, config):
-        ...
+    def __init__(self, filelist, config): ...
 ```
 
 ### DatasetSampler().finalize
@@ -32,8 +31,7 @@ class DatasetSampler:
 #### Signature
 
 ```python
-def finalize(self):
-    ...
+def finalize(self): ...
 ```
 
 ### DatasetSampler().get
@@ -43,8 +41,7 @@ def finalize(self):
 #### Signature
 
 ```python
-def get(self):
-    ...
+def get(self): ...
 ```
 
 ### DatasetSampler().reload_switch
@@ -54,8 +51,7 @@ def get(self):
 #### Signature
 
 ```python
-def reload_switch(self, init: bool = True):
-    ...
+def reload_switch(self, init: bool = True): ...
 ```
 
 ### DatasetSampler().wait
@@ -65,8 +61,5 @@ def reload_switch(self, init: bool = True):
 #### Signature
 
 ```python
-def wait(self):
-    ...
+def wait(self): ...
 ```
-
-

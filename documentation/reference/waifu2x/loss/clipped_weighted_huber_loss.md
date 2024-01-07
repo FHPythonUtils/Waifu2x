@@ -24,8 +24,7 @@ ClippedWeightedHuberLoss
 class ClippedWeightedHuberLoss(function.Function):
     def __init__(
         self, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
-    ):
-        ...
+    ): ...
 ```
 
 ### ClippedWeightedHuberLoss().backward
@@ -35,8 +34,7 @@ class ClippedWeightedHuberLoss(function.Function):
 #### Signature
 
 ```python
-def backward(self, inputs, grad_outputs):
-    ...
+def backward(self, inputs, grad_outputs): ...
 ```
 
 ### ClippedWeightedHuberLoss().check_type_forward
@@ -46,8 +44,7 @@ def backward(self, inputs, grad_outputs):
 #### Signature
 
 ```python
-def check_type_forward(self, in_types):
-    ...
+def check_type_forward(self, in_types): ...
 ```
 
 ### ClippedWeightedHuberLoss().forward
@@ -57,8 +54,7 @@ def check_type_forward(self, in_types):
 #### Signature
 
 ```python
-def forward(self, inputs):
-    ...
+def forward(self, inputs): ...
 ```
 
 
@@ -72,8 +68,5 @@ def forward(self, inputs):
 ```python
 def clipped_weighted_huber_loss(
     x, t, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
-):
-    ...
+): ...
 ```
-
-

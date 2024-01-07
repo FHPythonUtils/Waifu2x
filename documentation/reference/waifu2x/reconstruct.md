@@ -20,8 +20,9 @@ Reconstruct
 #### Signature
 
 ```python
-def blockwise(src: np.ndarray, model: chainer.Chain, block_size: int, batch_size: int):
-    ...
+def blockwise(
+    src: np.ndarray, model: chainer.Chain, block_size: int, batch_size: int
+): ...
 ```
 
 
@@ -33,8 +34,7 @@ def blockwise(src: np.ndarray, model: chainer.Chain, block_size: int, batch_size
 #### Signature
 
 ```python
-def get_tta_patterns(src: np.ndarray, n: int):
-    ...
+def get_tta_patterns(src: np.ndarray, n: int): ...
 ```
 
 
@@ -46,8 +46,7 @@ def get_tta_patterns(src: np.ndarray, n: int):
 #### Signature
 
 ```python
-def image(src, model, block_size: int, batch_size: int) -> Image.Image:
-    ...
+def image(src, model, block_size: int, batch_size: int) -> Image.Image: ...
 ```
 
 
@@ -65,8 +64,7 @@ def image_tta(
     tta_level: int,
     block_size: int,
     batch_size: int,
-):
-    ...
+): ...
 ```
 
 
@@ -78,8 +76,5 @@ def image_tta(
 #### Signature
 
 ```python
-def inv(rot: int, flip: bool = False):
-    ...
+def inv(rot: int, flip: bool = False): ...
 ```
-
-
