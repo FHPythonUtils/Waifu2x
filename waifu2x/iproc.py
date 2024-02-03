@@ -1,20 +1,26 @@
 from __future__ import annotations
 
+import contextlib
 import io
 
 import chainer
 import chainer.backends.cuda
 import chainer.links as L
 import numpy as np
+from chainer.link import Chain
 from PIL import Image
 
-try:
+
+def _assert(predicate: bool) -> None:  # noqa: FBT001
+	if not predicate:
+		raise RuntimeError
+
+
+with contextlib.suppress(ImportError):
 	import wand.image
-except ImportError:
-	pass
 
 
-def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.Chain):
+def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: Chain):
 	xp = model.xp
 	sum2d = L.Convolution2D(1, 1, 3, 1, 1, nobias=True, initialW=1)
 	if xp == chainer.backends.cuda.cupy:
@@ -44,11 +50,15 @@ def alpha_make_border(rgb: np.ndarray, alpha: np.ndarray | None, model: chainer.
 	return Image.fromarray(rgb.transpose(1, 2, 0).astype(np.uint8))
 
 
-def read_image_rgb_uint8(path: str):
+def read_image_rgb_uint8(path: str) -> np.ndarray:
+	"""Read an image from a path as a numpy uint8 array.
+
+	:param str path: path of the image to open
+	:return np.ndarray: image as numpy uint8 array
+	"""
 	src = Image.open(path)
-	if src.mode in ("L", "RGB", "P"):
-		if isinstance(src.info.get("transparency"), bytes):
-			src = src.convert("RGBA")
+	if src.mode in ("L", "RGB", "P") and isinstance(src.info.get("transparency"), bytes):
+		src = src.convert("RGBA")
 	mode = src.mode
 	if mode in ("LA", "RGBA"):
 		if mode == "LA":
@@ -57,28 +67,30 @@ def read_image_rgb_uint8(path: str):
 		rgb.paste(src, mask=src.split()[-1])
 	else:
 		rgb = src.convert("RGB")
-	dst = np.array(rgb, dtype=np.uint8)
-	return dst
+	return np.array(rgb, dtype=np.uint8)
 
 
 def array_to_wand(src: np.ndarray):
-	assert isinstance(src, np.ndarray)
+	"""Convert image (nd.array) to wand.image.Image."""
+
+	_assert(isinstance(src, np.ndarray))
 	with io.BytesIO() as buf:
 		tmp = Image.fromarray(src).convert("RGB")
 		tmp.save(buf, "PNG", compress_level=0)
-		dst = wand.image.Image(blob=buf.getvalue())
-	return dst
+		return wand.image.Image(blob=buf.getvalue())
 
 
 def wand_to_array(src: wand.image.Image):
-	assert isinstance(src, wand.image.Image)
+	"""Convert image (wand.image.Image) to nd.array."""
+	_assert(isinstance(src, wand.image.Image))
 	with io.BytesIO(src.make_blob("PNG")) as buf:
 		tmp = Image.open(buf).convert("RGB")
-		dst = np.array(tmp, dtype=np.uint8)
-	return dst
+		return np.array(tmp, dtype=np.uint8)
 
 
-def nn_scaling(src: Image.Image | np.ndarray | None, ratio: int) -> Image.Image | np.ndarray | None:
+def nn_scaling(
+	src: Image.Image | np.ndarray | None, ratio: float
+) -> Image.Image | np.ndarray | None:
 	if src is None:
 		return None
 
@@ -91,7 +103,8 @@ def nn_scaling(src: Image.Image | np.ndarray | None, ratio: int) -> Image.Image 
 			tmp.resize(int(w * ratio), int(h * ratio), "box")
 			dst = wand_to_array(tmp)
 	else:
-		raise ValueError("Unknown image type")
+		msg = "Unknown image type"
+		raise TypeError(msg)
 	return dst
 
 
@@ -113,5 +126,4 @@ def clipped_psnr(y, t, a_min: float = 0.0, a_max: float = 1.0):
 	y_c = xp.clip(y, a_min, a_max)
 	t_c = xp.clip(t, a_min, a_max)
 	mse = xp.mean(xp.square(y_c - t_c))
-	psnr = 20 * xp.log10(a_max / xp.sqrt(mse))
-	return psnr
+	return 20 * xp.log10(a_max / xp.sqrt(mse))

@@ -1,8 +1,6 @@
 # Data Augmentation
 
-[Waifu2x Index](../README.md#waifu2x-index) /
-[Waifu2x](./index.md#waifu2x) /
-Data Augmentation
+[Waifu2x Index](../README.md#waifu2x-index) / [Waifu2x](./index.md#waifu2x) / Data Augmentation
 
 > Auto-generated documentation for [waifu2x.data_augmentation](../../../waifu2x/data_augmentation.py) module.
 
@@ -15,19 +13,45 @@ Data Augmentation
 
 ## color_noise
 
-[Show source in data_augmentation.py:22](../../../waifu2x/data_augmentation.py#L22)
+[Show source in data_augmentation.py:48](../../../waifu2x/data_augmentation.py#L48)
+
+Apply color noise to the input image array.
+
+#### Arguments
+
+----
+- `src` *np.ndarray* - Input image array.
+- `p` *float* - Probability of applying the noise.
+- `factor` *float* - Noise factor.
+
+#### Returns
+
+-------
+- `np.ndarray` - Processed image array.
 
 #### Signature
 
 ```python
-def color_noise(src: np.ndarray, p, factor: float = 0.1) -> np.ndarray: ...
+def color_noise(src: np.ndarray, p: float, factor: float = 0.1) -> np.ndarray: ...
 ```
 
 
 
 ## flip
 
-[Show source in data_augmentation.py:33](../../../waifu2x/data_augmentation.py#L33)
+[Show source in data_augmentation.py:73](../../../waifu2x/data_augmentation.py#L73)
+
+Flip the input image array.
+
+#### Arguments
+
+----
+- `src` *np.ndarray* - Input image array.
+
+#### Returns
+
+-------
+- `np.ndarray` - Processed image array.
 
 #### Signature
 
@@ -39,7 +63,20 @@ def flip(src: np.ndarray) -> np.ndarray: ...
 
 ## half
 
-[Show source in data_augmentation.py:45](../../../waifu2x/data_augmentation.py#L45)
+[Show source in data_augmentation.py:97](../../../waifu2x/data_augmentation.py#L97)
+
+Scale down the input image array by half.
+
+#### Arguments
+
+----
+- `src` *np.ndarray* - Input image array.
+- `p` *np.ndarray* - Probability array.
+
+#### Returns
+
+-------
+- `np.ndarray` - Processed image array.
 
 #### Signature
 
@@ -51,7 +88,19 @@ def half(src: np.ndarray, p: np.ndarray) -> np.ndarray: ...
 
 ## shift_1px
 
-[Show source in data_augmentation.py:54](../../../waifu2x/data_augmentation.py#L54)
+[Show source in data_augmentation.py:117](../../../waifu2x/data_augmentation.py#L117)
+
+Shift the input image array by 1 pixel.
+
+#### Arguments
+
+----
+- src (np.ndarray): Input image array.
+
+#### Returns
+
+-------
+- `-` *np.ndarray* - Shifted image array.
 
 #### Signature
 
@@ -63,10 +112,23 @@ def shift_1px(src: np.ndarray) -> np.ndarray: ...
 
 ## unsharp_mask
 
-[Show source in data_augmentation.py:11](../../../waifu2x/data_augmentation.py#L11)
+[Show source in data_augmentation.py:26](../../../waifu2x/data_augmentation.py#L26)
+
+Apply unsharp mask filter to the input image array.
+
+#### Arguments
+
+----
+- `src` *np.ndarray* - Input image array.
+- `p` *float* - Probability of applying the filter.
+
+#### Returns
+
+-------
+- `np.ndarray` - Processed image array.
 
 #### Signature
 
 ```python
-def unsharp_mask(src: np.ndarray, p) -> np.ndarray: ...
+def unsharp_mask(src: np.ndarray, p: float) -> np.ndarray: ...
 ```

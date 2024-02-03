@@ -16,11 +16,9 @@ def _noise(src, p: np.ndarray, level: int):
 		# YUV 420
 		sampling_factor = "2x2,1x1,1x1"
 	if level == 0:
-		dst = iproc.jpeg(src, sampling_factor, random.randint(85, 100))
-		return dst
+		return iproc.jpeg(src, sampling_factor, random.randint(85, 100))
 	if level == 1:
-		dst = iproc.jpeg(src, sampling_factor, random.randint(65, 90))
-		return dst
+		return iproc.jpeg(src, sampling_factor, random.randint(65, 90))
 	if level in (2, 3):
 		# for level 3, --nr_rate 1
 		rand = np.random.uniform()
@@ -34,15 +32,15 @@ def _noise(src, p: np.ndarray, level: int):
 			dst = iproc.jpeg(dst, sampling_factor, random.randint(35, 65))
 			dst = iproc.jpeg(dst, sampling_factor, random.randint(25, 55))
 		return dst
-	raise ValueError(f"Unknown noise level: {level}")
+	msg = f"Unknown noise level: {level}"
+	raise ValueError(msg)
 
 
 def noise(src: np.ndarray, p: np.ndarray, p_chroma, level: int):
 	if np.random.uniform() < p:
 		with iproc.array_to_wand(src) as tmp:
 			tmp = _noise(tmp, p_chroma, level)
-			dst = iproc.wand_to_array(tmp)
-		return dst
+			return iproc.wand_to_array(tmp)
 	return src
 
 
@@ -54,8 +52,7 @@ def scale(src: np.ndarray, filters, bmin, bmax, scale_):
 		tmp.resize(w // 2, h // 2, filters[rand], blur)
 		if scale_:
 			tmp.resize(w, h, "box")
-		dst = iproc.wand_to_array(tmp)
-	return dst
+		return iproc.wand_to_array(tmp)
 
 
 def noise_scale(
@@ -70,16 +67,14 @@ def noise_scale(
 			tmp = _noise(tmp, p_chroma, level)
 		if scale_:
 			tmp.resize(w, h, "box")
-		dst = iproc.wand_to_array(tmp)
-	return dst
+		return iproc.wand_to_array(tmp)
 
 
 def crop_if_large(src: np.ndarray, max_size: int):
 	if max_size > 0 and src.shape[1] > max_size and src.shape[0] > max_size:
 		point_x = random.randint(0, src.shape[1] - max_size)
 		point_y = random.randint(0, src.shape[0] - max_size)
-		dst = src[point_y : point_y + max_size, point_x : point_x + max_size, :]
-		return dst
+		return src[point_y : point_y + max_size, point_x : point_x + max_size, :]
 	return src
 
 
@@ -89,15 +84,16 @@ def preprocess(src: np.ndarray, args: argparse.Namespace):
 	dst = data_augmentation.flip(dst)
 	dst = data_augmentation.color_noise(dst, args.random_color_noise_rate)
 	dst = data_augmentation.unsharp_mask(dst, args.random_unsharp_mask_rate)
-	dst = data_augmentation.shift_1px(dst)
-	return dst
+	return data_augmentation.shift_1px(dst)
 
 
 def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int):
 	if size % scale_ != 0:
-		raise ValueError("crop_size % scale must be 0")
+		msg = "crop_size % scale must be 0"
+		raise ValueError(msg)
 	if x.shape[0] * scale_ != y.shape[0] or x.shape[1] * scale_ != y.shape[1]:
-		raise ValueError(f"Scaled shape must be equal ({x.shape[:1]}, {y.shape[:1]})")
+		msg = f"Scaled shape must be equal ({x.shape[:1]}, {y.shape[:1]})"
+		raise ValueError(msg)
 
 	size_x = size // scale_
 	if np.random.uniform() < p:
@@ -142,11 +138,13 @@ def pairwise_transform(src: np.ndarray, args: argparse.Namespace):
 		)
 	elif args.method == "noise":
 		if args.inner_scale != 1:
-			raise ValueError("inner_scale must be 1")
+			msg = "inner_scale must be 1"
+			raise ValueError(msg)
 		x = noise(y, args.nr_rate, args.chroma_subsampling_rate, args.noise_level)
 	elif args.method == "noise_scale":
 		if args.inner_scale == 1:
-			raise ValueError("inner_scale must be > 1")
+			msg = "inner_scale must be > 1"
+			raise ValueError(msg)
 		x = noise_scale(
 			y,
 			args.downsampling_filters,

@@ -1,8 +1,6 @@
 # Reconstruct
 
-[Waifu2x Index](../README.md#waifu2x-index) /
-[Waifu2x](./index.md#waifu2x) /
-Reconstruct
+[Waifu2x Index](../README.md#waifu2x-index) / [Waifu2x](./index.md#waifu2x) / Reconstruct
 
 > Auto-generated documentation for [waifu2x.reconstruct](../../../waifu2x/reconstruct.py) module.
 
@@ -15,21 +13,19 @@ Reconstruct
 
 ## blockwise
 
-[Show source in reconstruct.py:17](../../../waifu2x/reconstruct.py#L17)
+[Show source in reconstruct.py:14](../../../waifu2x/reconstruct.py#L14)
 
 #### Signature
 
 ```python
-def blockwise(
-    src: np.ndarray, model: chainer.Chain, block_size: int, batch_size: int
-): ...
+def blockwise(src: np.ndarray, model: Chain, block_size: int, batch_size: int): ...
 ```
 
 
 
 ## get_tta_patterns
 
-[Show source in reconstruct.py:71](../../../waifu2x/reconstruct.py#L71)
+[Show source in reconstruct.py:68](../../../waifu2x/reconstruct.py#L68)
 
 #### Signature
 
@@ -41,7 +37,7 @@ def get_tta_patterns(src: np.ndarray, n: int): ...
 
 ## image
 
-[Show source in reconstruct.py:127](../../../waifu2x/reconstruct.py#L127)
+[Show source in reconstruct.py:120](../../../waifu2x/reconstruct.py#L120)
 
 #### Signature
 
@@ -53,17 +49,13 @@ def image(src, model, block_size: int, batch_size: int) -> Image.Image: ...
 
 ## image_tta
 
-[Show source in reconstruct.py:92](../../../waifu2x/reconstruct.py#L92)
+[Show source in reconstruct.py:89](../../../waifu2x/reconstruct.py#L89)
 
 #### Signature
 
 ```python
 def image_tta(
-    src: Image.Image,
-    model: chainer.Chain,
-    tta_level: int,
-    block_size: int,
-    batch_size: int,
+    src: Image.Image, model: Chain, tta_level: int, block_size: int, batch_size: int
 ): ...
 ```
 
@@ -71,7 +63,7 @@ def image_tta(
 
 ## inv
 
-[Show source in reconstruct.py:65](../../../waifu2x/reconstruct.py#L65)
+[Show source in reconstruct.py:62](../../../waifu2x/reconstruct.py#L62)
 
 #### Signature
 

@@ -25,7 +25,7 @@ args = Namespace(
 models = load_models(args)
 
 
-def test_background_png():
+def test_background_png() -> None:
 	"""test_background_png"""
 	src = Image.open(f"{THISDIR}/data/background.png")
 	dst = src.copy()
@@ -38,7 +38,7 @@ def test_background_png():
 	)
 
 
-def test_background_jpg():
+def test_background_jpg() -> None:
 	"""test_background_jpg"""
 	src = Image.open(f"{THISDIR}/data/background.jpg")
 	dst = src.copy()
@@ -51,7 +51,7 @@ def test_background_jpg():
 	)
 
 
-def test_foreground_png():
+def test_foreground_png() -> None:
 	"""test_foreground_png"""
 	src = Image.open(f"{THISDIR}/data/foreground.png")
 	dst = src.copy()
@@ -64,7 +64,7 @@ def test_foreground_png():
 	)
 
 
-def test_foreground_jpg():
+def test_foreground_jpg() -> None:
 	"""test_foreground_jpg"""
 	src = Image.open(f"{THISDIR}/data/foreground.jpg")
 	dst = src.copy()
@@ -77,7 +77,7 @@ def test_foreground_jpg():
 	)
 
 
-def test_run_background_png():
+def test_run_background_png() -> None:
 	"""test_run_background_png"""
 	input_img_path = f"{THISDIR}/data/background.png"
 	output_img_path = f"{THISDIR}/data/background_actual.png"
@@ -90,7 +90,7 @@ def test_run_background_png():
 	)
 
 
-def test_run_foreground_png():
+def test_run_foreground_png() -> None:
 	"""test_run_foreground_png"""
 	input_img_path = f"{THISDIR}/data/foreground.png"
 	output_img_path = f"{THISDIR}/data/foreground_actual.png"

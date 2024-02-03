@@ -1,39 +1,54 @@
+"""Waifu2x is an image upscaling and noise reduction algorithm that gained
+popularity for its ability to enhance the quality of anime-style images. The
+implementation in Chainer, a deep learning framework, uses neural networks
+to perform the image enhancement tasks.
+"""
+
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 import time
 from pathlib import Path
 
-import chainer
 import numpy as np
 from chainer.backends import cuda
+from chainer.link import Chain
 from chainer.serializers.npz import load_npz
 from PIL import Image
 
 from . import iproc, reconstruct, srcnn, utils
 
-THISDIR = str(Path(__file__).resolve().parent)
+THISDIR = Path(__file__).resolve().parent
+
+# ruff: noqa: T201
 
 
-def main():
-	"""Main entry point to the program."""
+def main() -> None:
+	"""Run the program, from the main entry point."""
 	run()
 
 
 def denoise_image(
-	args: argparse.Namespace, src: Image.Image, model: chainer.Chain, should_print: bool = True
+	args: argparse.Namespace,
+	src: Image.Image,
+	model: Chain,
+	*,
+	should_print: bool = True,
 ) -> Image.Image:
-	"""Remove noise from an image (src) using a scale model and an alpha model
+	"""Remove noise from an image (src) using a scale model and an alpha model.
 
 	Args:
+	----
 		args (argparse.Namespace): argparse namespace containing config such as the block_size
 		src (Image.Image): Pillow image to remove noise from
-		scale_model (chainer.Chain): model to use for scaling
+		model (Chain): model for scaling
+		should_print (bool): Flag to enable print to console
 
 	Returns:
+	-------
 		Image.Image: Pillow image with noise removed
+
 	"""
 	dst, alpha = split_alpha(src, model, should_print=should_print)
 	if should_print:
@@ -54,20 +69,26 @@ def denoise_image(
 def upscale_image(
 	args: argparse.Namespace,
 	src: Image.Image,
-	scale_model: chainer.Chain,
-	alpha_model: chainer.Chain | None = None,
+	scale_model: Chain,
+	alpha_model: Chain | None = None,
+	*,
 	should_print: bool = True,
 ) -> Image.Image:
-	"""Upscale an image (src) using a scale model and an alpha model
+	"""Upscale an image (src) using a scale model and an alpha model.
 
 	Args:
-		args (argparse.Namespace): argparse namespace containing config such as the scale_ratio and block size
+	----
+		args (argparse.Namespace): argparse namespace containing config such as the scale_ratio and
+		block size
 		src (Image.Image): Pillow image to upscale
-		scale_model (chainer.Chain): model to use for scaling
-		alpha_model (chainer.Chain, optional): model to use for alpha. Defaults to None.
+		scale_model (Chain): model to use for scaling
+		alpha_model (Chain, optional): model to use for alpha. Defaults to None.
+		should_print (bool): flag to enable output to console
 
 	Returns:
+	-------
 		Image.Image: upscaled Pillow image
+
 	"""
 	dst, alpha = split_alpha(src, scale_model, should_print=should_print)
 	for i in range(int(np.ceil(np.log2(args.scale_ratio)))):
@@ -105,8 +126,15 @@ def upscale_image(
 
 
 def split_alpha(
-	src: Image.Image, model: chainer.Chain, should_print: bool = True
+	src: Image.Image, model: Chain, *, should_print: bool = True
 ) -> tuple[Image.Image, Image.Image | None]:
+	"""Split the image into an rgb, and alpha tuple.
+
+	:param Image.Image src: image
+	:param Chain model: model to use
+	:param bool should_print: print to stdout?, defaults to True
+	:return tuple[Image.Image, Image.Image | None]: rgb, and alpha tuple
+	"""
 	alpha = None
 	if src.mode in ("L", "RGB", "P"):
 		srcRGBA = src.convert("RGBA")
@@ -126,53 +154,56 @@ def split_alpha(
 	return rgb, alpha
 
 
-def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]:
-	"""Load models using a args config
+def load_models(args: argparse.Namespace) -> dict[str, Chain]:
+	"""Load models using a args config.
 
 	Args:
+	----
 		args (argparse.Namespace): argparse namespace containing config such as the arch and color
 
 	Returns:
-		dict[str, chainer.Chain]: Mapping of model names to chainer.Chain models
+	-------
+		dict[str, Chain]: Mapping of model names to Chain models
+
 	"""
 	ch = 3 if args.color == "rgb" else 1
 	if args.model_dir is None:
-		model_dir = THISDIR + f"/models/{args.arch.lower()}"
+		model_dir = THISDIR / f"models/{args.arch.lower()}"
 	else:
-		model_dir = args.model_dir
+		model_dir = Path(args.model_dir)
 
 	models = {}
 	flag = False
 	if args.method == "noise_scale":
 		model_name = f"anime_style_noise{args.noise_level}_scale_{args.color}.npz"
-		model_path = os.path.join(model_dir, model_name)
-		if os.path.exists(model_path):
+		model_path = model_dir / model_name
+		if model_path.exists():
 			models["noise_scale"] = srcnn.archs[args.arch](ch)
 			load_npz(model_path, models["noise_scale"])
 			alpha_model_name = f"anime_style_scale_{args.color}.npz"
-			alpha_model_path = os.path.join(model_dir, alpha_model_name)
+			alpha_model_path = model_dir / alpha_model_name
 			models["alpha"] = srcnn.archs[args.arch](ch)
 			load_npz(alpha_model_path, models["alpha"])
 		else:
 			flag = True
 	if args.method == "scale" or flag:
 		model_name = f"anime_style_scale_{args.color}.npz"
-		model_path = os.path.join(model_dir, model_name)
+		model_path = model_dir / model_name
 		models["scale"] = srcnn.archs[args.arch](ch)
 		load_npz(model_path, models["scale"])
 	if args.method == "noise" or flag:
 		model_name = f"anime_style_noise{args.noise_level}_{args.color}.npz"
-		model_path = os.path.join(model_dir, model_name)
-		if not os.path.exists(model_path):
+		model_path = model_dir / model_name
+		if not model_path.exists():
 			model_name = f"anime_style_noise{args.noise_level}_scale_{args.color}.npz"
-			model_path = os.path.join(model_dir, model_name)
+			model_path = model_dir / model_name
 		models["noise"] = srcnn.archs[args.arch](ch)
 		load_npz(model_path, models["noise"])
 
 	if args.gpu >= 0:
 		cuda.check_cuda_available()
 		cuda.get_device(args.gpu).use()
-		for _, model in models.items():
+		for model in models.values():
 			model.to_gpu()
 	return models
 
@@ -199,8 +230,8 @@ def run(
 	shorter_side: int = 0,
 	longer_side: int = 0,
 	should_print: bool = True,
-):  # pragma: no cover
-	"""Runs waifu2x. Mostly the same inputs as CLI ones.
+) -> None:  # pragma: no cover
+	"""Run waifu2x using mostly the same inputs as CLI ones.
 
 	:param str input_img_path: Input image/ directory, defaults to "images/small.png"
 	:param str output_img_path: Directory to write output images to, defaults to "./"
@@ -262,7 +293,8 @@ def run(
 		filelist = utils.load_filelist(args.input)
 	else:
 		if inputpath.suffix not in input_exts:
-			raise ValueError("Input suffix is not supported!")
+			msg = "Input suffix is not supported!"
+			raise ValueError(msg)
 		filelist = [args.input]
 
 	# Output dir/ file
@@ -281,12 +313,11 @@ def run(
 	for infile in filelist:
 		# File Exists?
 		inpath = Path(infile)
-		inbasename, insuffix = os.path.splitext(inpath.name)
 		if not inpath.exists():
 			p.print_help()
 			sys.exit(1)
 
-		if insuffix in input_exts:
+		if inpath.suffix in input_exts:
 			src = Image.open(infile)
 			w, h = src.size[:2]
 			if args.width != 0:
@@ -307,7 +338,7 @@ def run(
 			dst = src.copy()
 			start = time.time()
 
-			outname = inbasename
+			outname = inpath.name
 			outname += f"_(tta{args.tta_level})" if args.tta else "_"
 			if "noise_scale" in models:
 				outname += f"(noise{args.noise_level}_scale{args.scale_ratio:.1f}x)"
@@ -325,14 +356,15 @@ def run(
 				print(f"Elapsed time: {time.time() - start:.6f} sec")
 
 			if outsuffix not in output_exts:
-				raise ValueError("Output suffix is not supported!")
+				msg = "Output suffix is not supported!"
+				raise ValueError(msg)
 
 			outname += f"({args.arch}_{args.color}){outsuffix}"
 
 			if outfile is not None:
 				outname = outfile
 
-			outpath = os.path.join(outdir, outname)
+			outpath = Path(outdir, outname)
 
 			lossless = args.quality is None
 			quality = 100 if lossless else args.quality

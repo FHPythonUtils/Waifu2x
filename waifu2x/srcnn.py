@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import chainer
 import chainer.functions as F
 import chainer.links as L
+from chainer.link import Chain
 
 
-class VGG7(chainer.Chain):
-	def __init__(self, ch):
+class VGG7(Chain):
+	def __init__(self, ch) -> None:
 		super().__init__()
 		with self.init_scope():
 			self.conv1 = L.Convolution2D(ch, 32, 3)
@@ -28,12 +28,11 @@ class VGG7(chainer.Chain):
 		h = F.leaky_relu(self.conv4(h), 0.1)
 		h = F.leaky_relu(self.conv5(h), 0.1)
 		h = F.leaky_relu(self.conv6(h), 0.1)
-		h = self.conv7(h)
-		return h
+		return self.conv7(h)
 
 
-class UpConv7(chainer.Chain):
-	def __init__(self, ch: int):
+class UpConv7(Chain):
+	def __init__(self, ch: int) -> None:
 		super().__init__()
 		with self.init_scope():
 			self.conv1 = L.Convolution2D(ch, 16, 3)
@@ -55,14 +54,13 @@ class UpConv7(chainer.Chain):
 		h = F.leaky_relu(self.conv4(h), 0.1)
 		h = F.leaky_relu(self.conv5(h), 0.1)
 		h = F.leaky_relu(self.conv6(h), 0.1)
-		h = self.conv7(h)
-		return h
+		return self.conv7(h)
 
 
-class ResBlock(chainer.Chain):
+class ResBlock(Chain):
 	def __init__(
 		self, in_channels, out_channels, slope: float = 0.1, r: int = 16, se: bool = False
-	):
+	) -> None:
 		super().__init__()
 		with self.init_scope():
 			self.conv1 = L.Convolution2D(in_channels, out_channels, 3)
@@ -95,8 +93,8 @@ class ResBlock(chainer.Chain):
 		return h + x
 
 
-class ResNet10(chainer.Chain):
-	def __init__(self, ch):
+class ResNet10(Chain):
+	def __init__(self, ch) -> None:
 		super().__init__()
 		with self.init_scope():
 			self.conv_pre = L.Convolution2D(ch, 64, 3)
@@ -121,12 +119,11 @@ class ResNet10(chainer.Chain):
 		h = self.res5(h)
 		h = F.leaky_relu(self.conv_bridge(h), 0.1)
 		h = h + bridge[:, :, 11:-11, 11:-11]
-		h = self.conv_post(h)
-		return h
+		return self.conv_post(h)
 
 
-class UpResNet10(chainer.Chain):
-	def __init__(self, ch):
+class UpResNet10(Chain):
+	def __init__(self, ch) -> None:
 		super().__init__()
 		with self.init_scope():
 			self.conv_pre = L.Convolution2D(ch, 64, 3)
@@ -151,8 +148,7 @@ class UpResNet10(chainer.Chain):
 		h = self.res5(h)
 		h = F.leaky_relu(self.conv_bridge(h), 0.1)
 		h = h + bridge[:, :, 11:-11, 11:-11]
-		h = self.conv_post(h)
-		return h
+		return self.conv_post(h)
 
 
 archs = {

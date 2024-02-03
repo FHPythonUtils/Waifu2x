@@ -26,7 +26,7 @@ args = Namespace(
 models = load_models(args)
 
 
-def test_background_png():
+def test_background_png() -> None:
 	"""test_background_png"""
 	src = Image.open(f"{THISDIR}/data/background.png")
 	dst = src.copy()
@@ -39,7 +39,7 @@ def test_background_png():
 	)
 
 
-def test_foreground_png():
+def test_foreground_png() -> None:
 	"""test_foreground_png"""
 	src = Image.open(f"{THISDIR}/data/foreground.png")
 	dst = src.copy()

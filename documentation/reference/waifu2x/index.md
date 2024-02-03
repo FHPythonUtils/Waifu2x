@@ -1,7 +1,6 @@
 # Waifu2x
 
-[Waifu2x Index](../README.md#waifu2x-index) /
-Waifu2x
+[Waifu2x Index](../README.md#waifu2x-index) / Waifu2x
 
 > Auto-generated documentation for [waifu2x](../../../waifu2x/__init__.py) module.
 
@@ -16,28 +15,28 @@ Waifu2x
 
 ## denoise_image
 
-[Show source in __init__.py:25](../../../waifu2x/__init__.py#L25)
+[Show source in __init__.py:32](../../../waifu2x/__init__.py#L32)
 
-Remove noise from an image (src) using a scale model and an alpha model
+Remove noise from an image (src) using a scale model and an alpha model.
 
 #### Arguments
 
-- `args` *argparse.Namespace* - argparse namespace containing config such as the block_size
-- `src` *Image.Image* - Pillow image to remove noise from
-- `scale_model` *chainer.Chain* - model to use for scaling
+----
+ - `args` *argparse.Namespace* - argparse namespace containing config such as the block_size
+ - `src` *Image.Image* - Pillow image to remove noise from
+ - `model` *Chain* - model for scaling
+ - `should_print` *bool* - Flag to enable print to console
 
 #### Returns
 
-- `Image.Image` - Pillow image with noise removed
+-------
+ - `Image.Image` - Pillow image with noise removed
 
 #### Signature
 
 ```python
 def denoise_image(
-    args: argparse.Namespace,
-    src: Image.Image,
-    model: chainer.Chain,
-    should_print: bool = True,
+    args: argparse.Namespace, src: Image.Image, model: Chain, should_print: bool = True
 ) -> Image.Image: ...
 ```
 
@@ -45,45 +44,47 @@ def denoise_image(
 
 ## load_models
 
-[Show source in __init__.py:129](../../../waifu2x/__init__.py#L129)
+[Show source in __init__.py:157](../../../waifu2x/__init__.py#L157)
 
-Load models using a args config
+Load models using a args config.
 
 #### Arguments
 
-- `args` *argparse.Namespace* - argparse namespace containing config such as the arch and color
+----
+ - `args` *argparse.Namespace* - argparse namespace containing config such as the arch and color
 
 #### Returns
 
-- `dict[str,` *chainer.Chain]* - Mapping of model names to chainer.Chain models
+-------
+ - `dict[str,` *Chain]* - Mapping of model names to Chain models
 
 #### Signature
 
 ```python
-def load_models(args: argparse.Namespace) -> dict[str, chainer.Chain]: ...
+def load_models(args: argparse.Namespace) -> dict[str, Chain]: ...
 ```
 
 
 
 ## main
 
-[Show source in __init__.py:20](../../../waifu2x/__init__.py#L20)
+[Show source in __init__.py:27](../../../waifu2x/__init__.py#L27)
 
-Main entry point to the program.
+Run the program, from the main entry point.
 
 #### Signature
 
 ```python
-def main(): ...
+def main() -> None: ...
 ```
 
 
 
 ## run
 
-[Show source in __init__.py:180](../../../waifu2x/__init__.py#L180)
+[Show source in __init__.py:211](../../../waifu2x/__init__.py#L211)
 
-Runs waifu2x. Mostly the same inputs as CLI ones.
+Run waifu2x using mostly the same inputs as CLI ones.
 
 #### Arguments
 
@@ -134,20 +135,34 @@ def run(
     shorter_side: int = 0,
     longer_side: int = 0,
     should_print: bool = True,
-): ...
+) -> None: ...
 ```
 
 
 
 ## split_alpha
 
-[Show source in __init__.py:107](../../../waifu2x/__init__.py#L107)
+[Show source in __init__.py:128](../../../waifu2x/__init__.py#L128)
+
+Split the image into an rgb, and alpha tuple.
+
+:param Image.Image src: image
+
+#### Arguments
+
+- `model` *Chain* - model to use
+- `should_print` *bool* - print to stdout?, defaults to True
+
+#### Returns
+
+Type: *tuple[Image.Image, Image.Image | None]*
+rgb, and alpha tuple
 
 #### Signature
 
 ```python
 def split_alpha(
-    src: Image.Image, model: chainer.Chain, should_print: bool = True
+    src: Image.Image, model: Chain, should_print: bool = True
 ) -> tuple[Image.Image, Image.Image | None]: ...
 ```
 
@@ -155,20 +170,24 @@ def split_alpha(
 
 ## upscale_image
 
-[Show source in __init__.py:54](../../../waifu2x/__init__.py#L54)
+[Show source in __init__.py:69](../../../waifu2x/__init__.py#L69)
 
-Upscale an image (src) using a scale model and an alpha model
+Upscale an image (src) using a scale model and an alpha model.
 
 #### Arguments
 
-- `args` *argparse.Namespace* - argparse namespace containing config such as the scale_ratio and block size
-- `src` *Image.Image* - Pillow image to upscale
-- `scale_model` *chainer.Chain* - model to use for scaling
-- `alpha_model` *chainer.Chain, optional* - model to use for alpha. Defaults to None.
+----
+ - `args` *argparse.Namespace* - argparse namespace containing config such as the scale_ratio and
+ block size
+ - `src` *Image.Image* - Pillow image to upscale
+ - `scale_model` *Chain* - model to use for scaling
+ - `alpha_model` *Chain, optional* - model to use for alpha. Defaults to None.
+ - `should_print` *bool* - flag to enable output to console
 
 #### Returns
 
-- `Image.Image` - upscaled Pillow image
+-------
+ - `Image.Image` - upscaled Pillow image
 
 #### Signature
 
@@ -176,8 +195,8 @@ Upscale an image (src) using a scale model and an alpha model
 def upscale_image(
     args: argparse.Namespace,
     src: Image.Image,
-    scale_model: chainer.Chain,
-    alpha_model: chainer.Chain | None = None,
+    scale_model: Chain,
+    alpha_model: Chain | None = None,
     should_print: bool = True,
 ) -> Image.Image: ...
 ```

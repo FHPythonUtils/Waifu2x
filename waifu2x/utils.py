@@ -1,29 +1,53 @@
+"""Utility methods used in the waifu2x module."""
+
 from __future__ import annotations
 
 import os
 import random
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 
 
 class Namespace:
-	def __init__(self, kwargs):
+	"""Namespace representing a series of key value pairs. Similar to argparse.Namespace."""
+
+	def __init__(self, kwargs: dict[str, Any]) -> None:
+		"""Namespace representing a series of key value pairs. Similar to argparse.Namespace.
+
+		:param dict[str, Any] kwargs: initial values
+		"""
 		self.kwargs = kwargs
-		for key in kwargs.keys():
+		for key in kwargs:
 			setattr(self, key, kwargs[key])
 
-	def __repr__(self):
-		string = []
-		for key in self.kwargs.keys():
-			string.append(f"{key}={self.kwargs[key]}")
-		return ", ".join(string)
+	def __repr__(self) -> str:
+		"""Get a string representation of a namespace.
 
-	def append(self, key, value):
+		:return str:  representation of a namespace
+		"""
+		parts = [f"{key}={self.kwargs[key]}" for key in self.kwargs]
+		return ", ".join(parts)
+
+	def __str__(self) -> str:
+		"""Get a string representation of a namespace.
+
+		:return str:  representation of a namespace
+		"""
+		return self.__repr__()
+
+	def append(self, key: str, value: Any) -> None:
+		"""Append a new value and update the internal rep.
+
+		:param str key: key to store a new value at
+		:param Any value: corresponding value
+		"""
 		self.kwargs[key] = value
 		setattr(self, key, value)
 
 
-def get_config(base, model, train: bool = True):
+def get_config(base, model, *, train: bool = True) -> Namespace:
 	ch = model.ch
 	offset = model.offset
 	inner_scale = model.inner_scale
@@ -63,7 +87,12 @@ def get_config(base, model, train: bool = True):
 	return Namespace(config)
 
 
-def set_random_seed(seed, gpu: int = -1):
+def set_random_seed(seed: float, gpu: int = -1) -> None:
+	"""Set a seed given an iv and a gpu index (note -1 is 'no gpu').
+
+	:param float seed: seed/ iv for random
+	:param int gpu: gpu index (-1 is no gpu), defaults to -1
+	"""
 	random.seed(seed)
 	np.random.seed(seed)
 	if gpu >= 0:
@@ -72,13 +101,19 @@ def set_random_seed(seed, gpu: int = -1):
 		cupy.random.seed(seed)
 
 
-def load_filelist(directory: str, shuffle: bool = False):
+def load_filelist(directory: str, *, shuffle: bool = False) -> list[str]:
+	"""Get a list of files given a directory.
+
+	:param str directory: path to a directory
+	:param bool shuffle: use random.shuffle to change the order of returned files, defaults to False
+	:return list[str]: list of file paths
+	"""
 	files = os.listdir(directory)
 	datalist = []
 	for file in files:
-		path = os.path.join(directory, file)
-		if os.path.isfile(path):
-			datalist.append(path)
+		path = Path(directory) / file
+		if path.is_file():
+			datalist.append(path.as_posix())
 	if shuffle:
 		random.shuffle(datalist)
 	return datalist

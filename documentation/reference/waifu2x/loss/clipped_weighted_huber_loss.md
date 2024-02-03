@@ -1,9 +1,6 @@
 # ClippedWeightedHuberLoss
 
-[Waifu2x Index](../../README.md#waifu2x-index) /
-[Waifu2x](../index.md#waifu2x) /
-[Loss](./index.md#loss) /
-ClippedWeightedHuberLoss
+[Waifu2x Index](../../README.md#waifu2x-index) / [Waifu2x](../index.md#waifu2x) / [Loss](./index.md#loss) / ClippedWeightedHuberLoss
 
 > Auto-generated documentation for [waifu2x.loss.clipped_weighted_huber_loss](../../../../waifu2x/loss/clipped_weighted_huber_loss.py) module.
 
@@ -24,7 +21,7 @@ ClippedWeightedHuberLoss
 class ClippedWeightedHuberLoss(function.Function):
     def __init__(
         self, weight, delta: float = 0.1, clip: tuple[float, float] = (0.0, 1.0)
-    ): ...
+    ) -> None: ...
 ```
 
 ### ClippedWeightedHuberLoss().backward
@@ -44,7 +41,7 @@ def backward(self, inputs, grad_outputs): ...
 #### Signature
 
 ```python
-def check_type_forward(self, in_types): ...
+def check_type_forward(self, in_types) -> None: ...
 ```
 
 ### ClippedWeightedHuberLoss().forward

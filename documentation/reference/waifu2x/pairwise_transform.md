@@ -1,8 +1,6 @@
 # Pairwise Transform
 
-[Waifu2x Index](../README.md#waifu2x-index) /
-[Waifu2x](./index.md#waifu2x) /
-Pairwise Transform
+[Waifu2x Index](../README.md#waifu2x-index) / [Waifu2x](./index.md#waifu2x) / Pairwise Transform
 
 > Auto-generated documentation for [waifu2x.pairwise_transform](../../../waifu2x/pairwise_transform.py) module.
 
@@ -17,7 +15,7 @@ Pairwise Transform
 
 ## active_cropping
 
-[Show source in pairwise_transform.py:96](../../../waifu2x/pairwise_transform.py#L96)
+[Show source in pairwise_transform.py:90](../../../waifu2x/pairwise_transform.py#L90)
 
 #### Signature
 
@@ -29,7 +27,7 @@ def active_cropping(x, y, ly, size: int, scale_: int, p, tries: int): ...
 
 ## crop_if_large
 
-[Show source in pairwise_transform.py:77](../../../waifu2x/pairwise_transform.py#L77)
+[Show source in pairwise_transform.py:73](../../../waifu2x/pairwise_transform.py#L73)
 
 #### Signature
 
@@ -41,7 +39,7 @@ def crop_if_large(src: np.ndarray, max_size: int): ...
 
 ## noise
 
-[Show source in pairwise_transform.py:40](../../../waifu2x/pairwise_transform.py#L40)
+[Show source in pairwise_transform.py:39](../../../waifu2x/pairwise_transform.py#L39)
 
 #### Signature
 
@@ -53,7 +51,7 @@ def noise(src: np.ndarray, p: np.ndarray, p_chroma, level: int): ...
 
 ## noise_scale
 
-[Show source in pairwise_transform.py:61](../../../waifu2x/pairwise_transform.py#L61)
+[Show source in pairwise_transform.py:58](../../../waifu2x/pairwise_transform.py#L58)
 
 #### Signature
 
@@ -74,7 +72,7 @@ def noise_scale(
 
 ## pairwise_transform
 
-[Show source in pairwise_transform.py:128](../../../waifu2x/pairwise_transform.py#L128)
+[Show source in pairwise_transform.py:124](../../../waifu2x/pairwise_transform.py#L124)
 
 #### Signature
 
@@ -86,7 +84,7 @@ def pairwise_transform(src: np.ndarray, args: argparse.Namespace): ...
 
 ## preprocess
 
-[Show source in pairwise_transform.py:86](../../../waifu2x/pairwise_transform.py#L86)
+[Show source in pairwise_transform.py:81](../../../waifu2x/pairwise_transform.py#L81)
 
 #### Signature
 
@@ -98,7 +96,7 @@ def preprocess(src: np.ndarray, args: argparse.Namespace): ...
 
 ## scale
 
-[Show source in pairwise_transform.py:49](../../../waifu2x/pairwise_transform.py#L49)
+[Show source in pairwise_transform.py:47](../../../waifu2x/pairwise_transform.py#L47)
 
 #### Signature
 

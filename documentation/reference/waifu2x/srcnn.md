@@ -1,8 +1,6 @@
 # Srcnn
 
-[Waifu2x Index](../README.md#waifu2x-index) /
-[Waifu2x](./index.md#waifu2x) /
-Srcnn
+[Waifu2x Index](../README.md#waifu2x-index) / [Waifu2x](./index.md#waifu2x) / Srcnn
 
 > Auto-generated documentation for [waifu2x.srcnn](../../../waifu2x/srcnn.py) module.
 
@@ -15,12 +13,12 @@ Srcnn
 
 ## ResBlock
 
-[Show source in srcnn.py:62](../../../waifu2x/srcnn.py#L62)
+[Show source in srcnn.py:60](../../../waifu2x/srcnn.py#L60)
 
 #### Signature
 
 ```python
-class ResBlock(chainer.Chain):
+class ResBlock(Chain):
     def __init__(
         self,
         in_channels,
@@ -28,46 +26,46 @@ class ResBlock(chainer.Chain):
         slope: float = 0.1,
         r: int = 16,
         se: bool = False,
-    ): ...
+    ) -> None: ...
 ```
 
 
 
 ## ResNet10
 
-[Show source in srcnn.py:98](../../../waifu2x/srcnn.py#L98)
+[Show source in srcnn.py:96](../../../waifu2x/srcnn.py#L96)
 
 #### Signature
 
 ```python
-class ResNet10(chainer.Chain):
-    def __init__(self, ch): ...
+class ResNet10(Chain):
+    def __init__(self, ch) -> None: ...
 ```
 
 
 
 ## UpConv7
 
-[Show source in srcnn.py:35](../../../waifu2x/srcnn.py#L35)
+[Show source in srcnn.py:34](../../../waifu2x/srcnn.py#L34)
 
 #### Signature
 
 ```python
-class UpConv7(chainer.Chain):
-    def __init__(self, ch: int): ...
+class UpConv7(Chain):
+    def __init__(self, ch: int) -> None: ...
 ```
 
 
 
 ## UpResNet10
 
-[Show source in srcnn.py:128](../../../waifu2x/srcnn.py#L128)
+[Show source in srcnn.py:125](../../../waifu2x/srcnn.py#L125)
 
 #### Signature
 
 ```python
-class UpResNet10(chainer.Chain):
-    def __init__(self, ch): ...
+class UpResNet10(Chain):
+    def __init__(self, ch) -> None: ...
 ```
 
 
@@ -79,6 +77,6 @@ class UpResNet10(chainer.Chain):
 #### Signature
 
 ```python
-class VGG7(chainer.Chain):
-    def __init__(self, ch): ...
+class VGG7(Chain):
+    def __init__(self, ch) -> None: ...
 ```

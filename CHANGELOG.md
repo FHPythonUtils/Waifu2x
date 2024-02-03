@@ -3,6 +3,11 @@
 All major and minor version changes will be documented in this file. Details of
 patch-level version changes can be found in [commit messages](../../commits/master).
 
+## 2024 - 2024/02/03
+
+- use ruff instead of pylint
+- code quality improvements
+
 ## 2023 - 2023/06/26
 
 - Improved the tutorial docs

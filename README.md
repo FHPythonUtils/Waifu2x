@@ -12,7 +12,11 @@
 
 <img src="readme-assets/icons/name.png" alt="Project Icon" width="750">
 
-Chainer implementation of waifu2x.
+Waifu2x is an image upscaling and noise reduction algorithm that gained
+popularity for its ability to enhance the quality of anime-style images. The
+implementation in Chainer, a deep learning framework, uses neural networks
+to perform the image enhancement tasks.
+
 
 ## Help
 
