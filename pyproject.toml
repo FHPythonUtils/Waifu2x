@@ -27,19 +27,18 @@ waifu2x = 'waifu2x:main'
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-numpy = "<2,>=1.26.3"
+numpy = "<2,>=1.26.4"
 chainer = "<8,>=7.8.1"
 Pillow = "<11,>=10.2.0"
 Wand = "<2,>=0.6.13"
 
 [tool.poetry.dev-dependencies]
 imgcompare = "^2.0.1"
-pytest = "^8.0.0"
+pytest = "^8.0.2"
 handsdown = "^2.1.0"
-coverage = "^7.4.1"
+coverage = "^7.4.3"
 ruff = "^0.1.13"
-blackt = "^2024.0.1"
-pyright = "^1.1.349"
+pyright = "^1.1.351"
 
 [build-system]
 requires = ["poetry-core"]
@@ -68,9 +67,11 @@ fixable = ["ALL"]
 [tool.ruff.lint.per-file-ignores]
 "**/{tests,docs,tools}/*" = ["D", "S101", "E402", "ERA001"]
 
-[tool.black]
-line-length = 100
-target-version = ["py38"]
+[tool.ruff.format]
+indent-style = "tab"
+docstring-code-format = true
+line-ending = "lf"
+
 
 [tool.pyright]
 venvPath = "."
