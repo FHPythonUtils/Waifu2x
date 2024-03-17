@@ -17,7 +17,7 @@ from chainer.link import Chain
 from chainer.serializers.npz import load_npz
 from PIL import Image
 
-from . import iproc, reconstruct, srcnn, utils
+from waifu2x import iproc, reconstruct, srcnn, utils
 
 THISDIR = Path(__file__).resolve().parent
 

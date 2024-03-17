@@ -20,7 +20,7 @@ import random
 import numpy as np
 from PIL import Image, ImageFilter
 
-from . import iproc
+from waifu2x import iproc
 
 
 def unsharp_mask(src: np.ndarray, p: float) -> np.ndarray:

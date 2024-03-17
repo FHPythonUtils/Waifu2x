@@ -24,8 +24,8 @@ from tempfile import NamedTemporaryFile
 
 import numpy as np
 
-from . import iproc
-from .pairwise_transform import pairwise_transform
+from waifu2x import iproc
+from waifu2x.pairwise_transform import pairwise_transform
 
 
 class DatasetSampler:

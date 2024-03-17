@@ -6,7 +6,7 @@ import random
 import numpy as np
 from PIL import Image
 
-from . import data_augmentation, iproc
+from waifu2x import data_augmentation, iproc
 
 
 def _noise(src, p: np.ndarray, level: int):
