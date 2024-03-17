@@ -34,16 +34,15 @@ Wand = "<2,>=0.6.13"
 
 [tool.poetry.dev-dependencies]
 imgcompare = "^2.0.1"
-pytest = "^8.0.2"
+pytest = "^8.1.1"
 handsdown = "^2.1.0"
-coverage = "^7.4.3"
+coverage = "^7.4.4"
 ruff = "^0.2.2"
-pyright = "^1.1.351"
+pyright = "^1.1.354"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
 
 [tool.ruff]
 line-length = 100
@@ -53,29 +52,34 @@ target-version = "py38"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "ANN101",  # type annotation for self in method
-    "COM812",  # enforce trailing comma
+	"ANN101",  # type annotation for self in method
+	"COM812",  # enforce trailing comma
 	"D2",  # pydocstyle formatting
-    "N",  # pep8 naming
-    "PLR09",  # pylint refactor too many
-    "TCH",  # type check blocks
-    "W191"  # ignore this to allow tabs
+	"ISC001",
+	"N",  # pep8 naming
+	"PLR09",  # pylint refactor too many
+	"TCH",  # type check blocks
+	"W191"  # ignore this to allow tabs
 ]
 fixable = ["ALL"]
 
-
 [tool.ruff.lint.per-file-ignores]
-"**/{tests,docs,tools}/*" = ["D", "S101", "E402", "ERA001"]
+"**/{tests,docs,tools}/*" = ["D", "S101", "E402"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all" # Disallow all relative imports.
 
 [tool.ruff.format]
 indent-style = "tab"
 docstring-code-format = true
 line-ending = "lf"
 
-
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+
+[tool.coverage.run]
+branch = true
 
 [tool.tox]
 legacy_tox_ini = """

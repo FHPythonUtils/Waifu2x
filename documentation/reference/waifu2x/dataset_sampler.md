@@ -15,7 +15,7 @@
 
 ## DatasetSampler
 
-[Show source in dataset_sampler.py:32](../../../waifu2x/dataset_sampler.py#L32)
+[Show source in dataset_sampler.py:31](../../../waifu2x/dataset_sampler.py#L31)
 
 Class for sampling datasets for training or testing purposes.
 
@@ -57,7 +57,7 @@ class DatasetSampler:
 
 ### DatasetSampler()._init_process
 
-[Show source in dataset_sampler.py:104](../../../waifu2x/dataset_sampler.py#L104)
+[Show source in dataset_sampler.py:103](../../../waifu2x/dataset_sampler.py#L103)
 
 Initialize the sampling process.
 
@@ -69,7 +69,7 @@ def _init_process(self) -> None: ...
 
 ### DatasetSampler().finalize
 
-[Show source in dataset_sampler.py:91](../../../waifu2x/dataset_sampler.py#L91)
+[Show source in dataset_sampler.py:90](../../../waifu2x/dataset_sampler.py#L90)
 
 Finalize the dataset sampling process.
 
@@ -81,7 +81,7 @@ def finalize(self) -> None: ...
 
 ### DatasetSampler().get
 
-[Show source in dataset_sampler.py:121](../../../waifu2x/dataset_sampler.py#L121)
+[Show source in dataset_sampler.py:120](../../../waifu2x/dataset_sampler.py#L120)
 
 Retrieve the dataset.
 
@@ -93,7 +93,7 @@ def get(self): ...
 
 ### DatasetSampler().reload_switch
 
-[Show source in dataset_sampler.py:99](../../../waifu2x/dataset_sampler.py#L99)
+[Show source in dataset_sampler.py:98](../../../waifu2x/dataset_sampler.py#L98)
 
 Switches the reload state.
 
@@ -105,7 +105,7 @@ def reload_switch(self, init: bool = True) -> None: ...
 
 ### DatasetSampler().wait
 
-[Show source in dataset_sampler.py:114](../../../waifu2x/dataset_sampler.py#L114)
+[Show source in dataset_sampler.py:113](../../../waifu2x/dataset_sampler.py#L113)
 
 Wait for the process to complete.
 
@@ -119,7 +119,7 @@ def wait(self) -> None: ...
 
 ## _worker
 
-[Show source in dataset_sampler.py:138](../../../waifu2x/dataset_sampler.py#L138)
+[Show source in dataset_sampler.py:137](../../../waifu2x/dataset_sampler.py#L137)
 
 Worker function for dataset sampling.
 
