@@ -12,6 +12,8 @@
 
 <img src="readme-assets/icons/name.png" alt="Project Icon" width="750">
 
+**Python 3.12 is not supported :(**
+
 Waifu2x is an image upscaling and noise reduction algorithm that gained
 popularity for its ability to enhance the quality of anime-style images. The
 implementation in Chainer, a deep learning framework, uses neural networks

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "waifu2x"
-version = "2024"
+version = "2024.0.1"
 license = "mit"
 description = "Chainer implementation of waifu2x"
 authors = ["FredHappyface"]
@@ -26,7 +26,7 @@ readme = "README.md"
 waifu2x = 'waifu2x:main'
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.9,<3.12"
 numpy = "<2,>=1.26.4"
 chainer = "<8,>=7.8.1"
 Pillow = "<11,>=10.2.0"
